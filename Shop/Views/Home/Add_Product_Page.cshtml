@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "เพิ่มสินค้า";
+}
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<div>
+    <br><br>
+    <table class="center">
+        <tr>
+            <td>ชื่อสินค้า :</td>
+            <td><input type="text" value="" id="add_product"></td>
+        </tr>
+        <tr>
+            <td><label>หน่วย : </label></td>
+
+            <td>
+                <select name="name_unit" id="add_unit">
+
+                    @{
+                        foreach (var data in Model)
+                        {
+                            <option value="@data.IdNoun">@data.Name</option>
+                        }
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>ราคา : </label></td>
+            <td><input type="text" value="" id="add_price"></td>
+        </tr>
+    </table>
+    <br>
+    <center>
+        <input type='button' value='บันทึก' id='myButton' onclick="Save_Product()" />
+    </center>
+    <br>
+
+</div>
+<style>
+    table {
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+
+
+
+

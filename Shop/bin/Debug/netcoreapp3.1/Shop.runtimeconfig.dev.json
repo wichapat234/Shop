@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\wicha\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\wicha\\.nuget\\packages"
+    ]
+  }
+}
