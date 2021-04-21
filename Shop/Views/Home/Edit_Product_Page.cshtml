@@ -22,16 +22,16 @@
             <td>
                 <select name="name_unit" id="edit_unit">
 
-                    @foreach (var data in Model.noun)
+                    @foreach (var data in Model.unit)
                     {
-                        if (Model.IdNoun == data.IdNoun)
+                        if (Model.IdUnit == data.IdUnit)
                         {
-                            <option value="@data.IdNoun" selected> @data.Name </option>
+                            <option value="@data.IdUnit" selected> @data.NameUnit </option>
 
                         }
                         else
                         {
-                            <option value="@data.IdNoun"> @data.Name </option>
+                            <option value="@data.IdUnit"> @data.NameUnit </option>
                         }
 
                         @*@(Model.IdNoun == data.IdNoun? "selected" : "" )*@

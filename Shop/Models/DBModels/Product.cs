@@ -7,15 +7,15 @@ namespace Shop.Models.DBModels
     {
         public Product()
         {
-            Bill = new HashSet<Bill>();
+            BillDetail = new HashSet<BillDetail>();
         }
 
         public int IdProduct { get; set; }
         public string ProductName { get; set; }
         public double ProductPrice { get; set; }
-        public int IdNoun { get; set; }
+        public int IdUnit { get; set; }
 
-        public virtual Noun IdNounNavigation { get; set; }
-        public virtual ICollection<Bill> Bill { get; set; }
+        public virtual Unit IdUnitNavigation { get; set; }
+        public virtual ICollection<BillDetail> BillDetail { get; set; }
     }
 }

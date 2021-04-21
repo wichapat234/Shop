@@ -16,9 +16,9 @@ namespace Shop.Models.DBModels
         }
 
         public virtual DbSet<Bill> Bill { get; set; }
-        public virtual DbSet<Noun> Noun { get; set; }
+        public virtual DbSet<BillDetail> BillDetail { get; set; }
         public virtual DbSet<Product> Product { get; set; }
-        public virtual DbSet<SumaryBill> SumaryBill { get; set; }
+        public virtual DbSet<Unit> Unit { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -38,108 +38,11 @@ namespace Shop.Models.DBModels
 
                 entity.ToTable("bill");
 
-                entity.HasIndex(e => e.IdBill)
-                    .HasName("idBill_UNIQUE")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.IdProduct)
-                    .HasName("fk_bill_product1_idx");
-
-                entity.HasIndex(e => e.IdsumaryBill)
-                    .HasName("idsumary_bill_idx");
-
-                entity.Property(e => e.IdBill).HasColumnName("idBill");
-
-                entity.Property(e => e.BillNumber).HasColumnName("bill_number");
-
-                entity.Property(e => e.Count).HasColumnName("count");
-
-                entity.Property(e => e.Discount).HasColumnName("discount");
-
-                entity.Property(e => e.IdProduct).HasColumnName("idProduct");
-
-                entity.Property(e => e.IdsumaryBill).HasColumnName("idsumary_bill");
-
-                entity.Property(e => e.LastPrice).HasColumnName("last_price");
-
-                entity.Property(e => e.Totalprice).HasColumnName("totalprice");
-
-                entity.HasOne(d => d.IdProductNavigation)
-                    .WithMany(p => p.Bill)
-                    .HasForeignKey(d => d.IdProduct)
-                    .HasConstraintName("fk_bill_product1");
-
-                entity.HasOne(d => d.IdsumaryBillNavigation)
-                    .WithMany(p => p.Bill)
-                    .HasForeignKey(d => d.IdsumaryBill)
-                    .HasConstraintName("idsumary_bill");
-            });
-
-            modelBuilder.Entity<Noun>(entity =>
-            {
-                entity.HasKey(e => e.IdNoun)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("noun");
-
-                entity.HasComment("คำนาม");
-
-                entity.HasIndex(e => e.IdNoun)
-                    .HasName("idNoun_UNIQUE")
-                    .IsUnique();
-
-                entity.Property(e => e.IdNoun).HasColumnName("idNoun");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasColumnType("varchar(45)")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
-            });
-
-            modelBuilder.Entity<Product>(entity =>
-            {
-                entity.HasKey(e => e.IdProduct)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("product");
-
-                entity.HasIndex(e => e.IdNoun)
-                    .HasName("IdNoun_idx");
-
-                entity.HasIndex(e => e.IdProduct)
-                    .HasName("idProduct_UNIQUE")
-                    .IsUnique();
-
-                entity.Property(e => e.IdProduct).HasColumnName("idProduct");
-
-                entity.Property(e => e.ProductName)
-                    .HasColumnName("Product_name")
-                    .HasColumnType("varchar(45)")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
-
-                entity.Property(e => e.ProductPrice).HasColumnName("Product_price");
-
-                entity.HasOne(d => d.IdNounNavigation)
-                    .WithMany(p => p.Product)
-                    .HasForeignKey(d => d.IdNoun)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("IdNoun");
-            });
-
-            modelBuilder.Entity<SumaryBill>(entity =>
-            {
-                entity.HasKey(e => e.IdsumaryBill)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("sumary_bill");
-
                 entity.HasIndex(e => e.BillNumber)
                     .HasName("bill_number_UNIQUE")
                     .IsUnique();
 
-                entity.Property(e => e.IdsumaryBill).HasColumnName("idsumary_bill");
+                entity.Property(e => e.IdBill).HasColumnName("id_bill");
 
                 entity.Property(e => e.BillNumber)
                     .HasColumnName("bill_number")
@@ -154,6 +57,104 @@ namespace Shop.Models.DBModels
                 entity.Property(e => e.PriceBefore).HasColumnName("price_before");
 
                 entity.Property(e => e.TotalDiscount).HasColumnName("total_discount");
+            });
+
+            modelBuilder.Entity<BillDetail>(entity =>
+            {
+                entity.HasKey(e => e.IdBillDetail)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("bill_detail");
+
+                entity.HasIndex(e => e.IdBill)
+                    .HasName("idsumary_bill_idx");
+
+                entity.HasIndex(e => e.IdBillDetail)
+                    .HasName("idBill_UNIQUE")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.IdProduct)
+                    .HasName("fk_bill_product1_idx");
+
+                entity.Property(e => e.IdBillDetail).HasColumnName("id_bill_detail");
+
+                entity.Property(e => e.Count).HasColumnName("count");
+
+                entity.Property(e => e.Discount).HasColumnName("discount");
+
+                entity.Property(e => e.IdBill).HasColumnName("id_bill");
+
+                entity.Property(e => e.IdProduct).HasColumnName("id_product");
+
+                entity.Property(e => e.LastPrice).HasColumnName("last_price");
+
+                entity.Property(e => e.TotalPrice).HasColumnName("total_price");
+
+                entity.HasOne(d => d.IdBillNavigation)
+                    .WithMany(p => p.BillDetail)
+                    .HasForeignKey(d => d.IdBill)
+                    .HasConstraintName("id_bill");
+
+                entity.HasOne(d => d.IdProductNavigation)
+                    .WithMany(p => p.BillDetail)
+                    .HasForeignKey(d => d.IdProduct)
+                    .HasConstraintName("fk_bill_product1");
+            });
+
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.HasKey(e => e.IdProduct)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("product");
+
+                entity.HasIndex(e => e.IdProduct)
+                    .HasName("idProduct_UNIQUE")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.IdUnit)
+                    .HasName("IdNoun_idx");
+
+                entity.Property(e => e.IdProduct).HasColumnName("id_product");
+
+                entity.Property(e => e.IdUnit).HasColumnName("id_unit");
+
+                entity.Property(e => e.ProductName)
+                    .HasColumnName("product_name")
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.ProductPrice).HasColumnName("product_price");
+
+                entity.HasOne(d => d.IdUnitNavigation)
+                    .WithMany(p => p.Product)
+                    .HasForeignKey(d => d.IdUnit)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("IdNoun");
+            });
+
+            modelBuilder.Entity<Unit>(entity =>
+            {
+                entity.HasKey(e => e.IdUnit)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("unit");
+
+                entity.HasComment("คำนาม");
+
+                entity.HasIndex(e => e.IdUnit)
+                    .HasName("idNoun_UNIQUE")
+                    .IsUnique();
+
+                entity.Property(e => e.IdUnit).HasColumnName("id_unit");
+
+                entity.Property(e => e.NameUnit)
+                    .IsRequired()
+                    .HasColumnName("name_unit")
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
             });
 
             OnModelCreatingPartial(modelBuilder);

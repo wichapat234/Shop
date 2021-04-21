@@ -5,16 +5,18 @@ namespace Shop.Models.DBModels
 {
     public partial class Bill
     {
-        public int IdBill { get; set; }
-        public int? IdProduct { get; set; }
-        public int? Count { get; set; }
-        public double? Discount { get; set; }
-        public double? Totalprice { get; set; }
-        public double? LastPrice { get; set; }
-        public int BillNumber { get; set; }
-        public int? IdsumaryBill { get; set; }
+        public Bill()
+        {
+            BillDetail = new HashSet<BillDetail>();
+        }
 
-        public virtual Product IdProductNavigation { get; set; }
-        public virtual SumaryBill IdsumaryBillNavigation { get; set; }
+        public int IdBill { get; set; }
+        public double PriceBefore { get; set; }
+        public double TotalDiscount { get; set; }
+        public double PriceAfter { get; set; }
+        public int BillNumber { get; set; }
+        public DateTime Date { get; set; }
+
+        public virtual ICollection<BillDetail> BillDetail { get; set; }
     }
 }

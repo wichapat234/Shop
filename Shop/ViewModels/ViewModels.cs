@@ -16,10 +16,15 @@ namespace Shop.ViewModels
         public double Discount { get; set; }
 
     }
+    public class GetdatabillViewmodel
+    {
+        public List<Product> product { get; set; }
+        public BillDetail billdetail { get; set; }
+    }
     public class DetailbillViewmodel 
     {
-        public List<Bill2Viewmodel> bill { get; set; }
-        public billViewmodel sumarybill { get; set; }
+        public List<Bill2Viewmodel> bill_detail { get; set; }
+        public billViewmodel bill { get; set; }
     }
     public class Bill2Viewmodel
     {
@@ -35,12 +40,12 @@ namespace Shop.ViewModels
 
     public class EditProductViewmodel
     {
-        public int IdNoun { get; set; }
+        public int IdUnit { get; set; }
         public string NameUnit { get; set; }
         public string NameProduct { get; set; }
         public int Product_Id { get; set; }
         public double ProductPrice { get; set; }
-        public List<Noun> noun { get; set; }
+        public List<Unit> unit { get; set; }
 
     }
     public class Unitparam
@@ -48,10 +53,10 @@ namespace Shop.ViewModels
         public int IdNoun { get; set; }
         public string Name { get; set; }
     }
-    public class Unit
+    public class Unitviewmodel
     {
-        public int IdNoun { get; set; }
-        public string Name { get; set; }
+        public int IdUnit { get; set; }
+        public string NameUnit { get; set; }
     }
 
     public class Products

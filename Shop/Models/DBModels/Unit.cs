@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace Shop.Models.DBModels
 {
-    public partial class Noun
+    public partial class Unit
     {
-        public Noun()
+        public Unit()
         {
             Product = new HashSet<Product>();
         }
 
-        public int IdNoun { get; set; }
-        public string Name { get; set; }
+        public int IdUnit { get; set; }
+        public string NameUnit { get; set; }
 
         public virtual ICollection<Product> Product { get; set; }
     }

@@ -21,10 +21,10 @@
                     foreach (var data in Model)
                     {
                         <tr>
-                            <td>@data.Name</td>
+                            <td>@data.NameUnit</td>
                             <td>
-                                <input type='button' value='แก้ไข' id='myButton' onClick='Edit_Unit(@data.IdNoun)' />&nbsp;
-                                <input type="button" name="delete" onClick='Delete_Unit(@data.IdNoun)' value="ลบ">
+                                <input type='button' value='แก้ไข' id='myButton' onClick='Edit_Unit(@data.IdUnit)' />&nbsp;
+                                <input type="button" name="delete" onClick='Delete_Unit(@data.IdUnit)' value="ลบ">
                             </td>
                         </tr>
                     }

@@ -11,13 +11,13 @@ $(document).ready(function () {
             url: '/Home/Get_dataProduct',
         })
             .then(function (response) {
-                console.log(response.data);
+               // console.log(response.data.billdetail);
                 var i = 0;
                 var table = "";
                 table += '<tr>'
-                table += '<td><select name="name_product" id="select_product" onchange="Data_product(); Resetinput();" > <option id="select">เลือกสินค้า</option>'
-                for (i = 0; i < response.data.length; i++) {
-                    table +='<option value="' + response.data[i].idProduct + '">' + response.data[i].productName +'</option>'
+                table += '<td><select name="name_product" id="select_product' + response.data.billdetail.idBillDetail + '" onchange="Data_product(); Resetinput();" > <option id="select">เลือกสินค้า</option>'
+                for (i = 0; i < response.data.product.length; i++) {
+                    table += '<option value="' + response.data.product[i].idProduct + '">' + response.data.product[i].productName +'</option>'
                 }
                 table += '</td></select>'
                 table += '<td id="unit"></td>'
@@ -28,6 +28,7 @@ $(document).ready(function () {
                 table += '<td id="last_total"></td>'
                 table += '</tr>'
                 $('#table_add_bill').append(table);
+                //Data_product(response.data.billdetail.idBillDetail );
             })
             .catch(function (error) {
                 console.log(error);
@@ -44,9 +45,8 @@ function Resetinput() {
 }
 function Data_product() {
     $("#select").remove();
-
-    var id_product = document.getElementById('select_product').value;
-    console.log(id_product)
+    //var iddata = id;
+    var id_product = document.getElementById('select_product' + iddata).value;
     var count = document.getElementById('count').value;
     var discount = document.getElementById('discount').value;
     var id = parseInt(id_product)

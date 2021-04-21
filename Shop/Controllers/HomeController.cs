@@ -21,11 +21,11 @@ namespace Shop.Controllers
         }
         public IActionResult List_Bill()
         {
-            var product = from a in context.SumaryBill
-                          join b in context.Bill on a.IdsumaryBill equals b.IdsumaryBill
+            var product = from a in context.Bill
+                          join b in context.Bill on a.IdBill equals b.IdBill
                           select new billViewmodel
                           {
-                              Id_Summary = a.IdsumaryBill,
+                              Id_Summary = a.IdBill,
                               Date = a.Date,
                               Bill_Number = a.BillNumber,
                               Price_Before = a.PriceBefore,
@@ -39,11 +39,11 @@ namespace Shop.Controllers
         {
             var product = from a in context.Product
                           orderby a.IdProduct
-                          join b in context.Noun on a.IdNoun equals b.IdNoun
+                          join b in context.Unit on a.IdUnit equals b.IdUnit
                           select new EditProductViewmodel
                           {
                               Product_Id = a.IdProduct,
-                              NameUnit = b.Name,
+                              NameUnit = b.NameUnit,
                               NameProduct = a.ProductName,
                               ProductPrice = a.ProductPrice
                           };
@@ -60,27 +60,28 @@ namespace Shop.Controllers
         public IActionResult Get_dataProduct()
         {
             //Products model = new Products();
-            var bill = new Bill()
+            var bill = new BillDetail()
             {
-                BillNumber = 1
+                IdBill = 1
             };
-            context.Bill.Add(bill);
+            context.BillDetail.Add(bill);
             context.SaveChanges();
-
-            var products = context.Product.ToList();
-            return Json(products);
+            GetdatabillViewmodel model = new GetdatabillViewmodel();
+            model.billdetail = context.BillDetail.OrderByDescending(b=>b.IdBillDetail).FirstOrDefault();
+            model.product = context.Product.ToList();
+            return Json(model);
         }
         public IActionResult Data_Product_Select([FromBody] Productsparam model)
         {
-                var json_data = from a in context.Product
-                             where a.IdProduct == model.IdProduct
-                              join b in context.Noun on a.IdNoun equals b.IdNoun
-                              select new EditProductViewmodel
-                              {
-                                  NameUnit = b.Name,
-                                  NameProduct = a.ProductName,
-                                  ProductPrice = a.ProductPrice
-                              };
+            var json_data = from a in context.Product
+                            where a.IdProduct == model.IdProduct
+                            join b in context.Unit on a.IdUnit equals b.IdUnit
+                            select new EditProductViewmodel
+                            {
+                                NameUnit = b.NameUnit,
+                                NameProduct = a.ProductName,
+                                ProductPrice = a.ProductPrice
+                            };
             return Json(json_data);
         }
         public IActionResult Shoping()
@@ -89,14 +90,14 @@ namespace Shop.Controllers
         }
         public IActionResult List_Unit()
         {
-            var Noun = context.Noun.ToList();
+            var Noun = context.Unit.ToList();
             return View(Noun);
         }
         public IActionResult Edit_Unit_Page(int? id)
         {
-            var json_data = from a in context.Noun
-                            where a.IdNoun == id
-                            select new Unit { IdNoun = a.IdNoun, Name = a.Name };
+            var json_data = from a in context.Unit
+                            where a.IdUnit == id
+                            select new Unitviewmodel { IdUnit = a.IdUnit, NameUnit = a.NameUnit };
             return View(json_data);
             ///   return View();
         }
@@ -106,36 +107,36 @@ namespace Shop.Controllers
             EditProductViewmodel model = new EditProductViewmodel();
             model = (from a in context.Product
                      where a.IdProduct == id
-                     join b in context.Noun on a.IdNoun equals b.IdNoun
+                     join b in context.Unit on a.IdUnit equals b.IdUnit
                      select new EditProductViewmodel
                      {
-                         IdNoun = a.IdNoun,
+                         IdUnit = a.IdUnit,
                          Product_Id = a.IdProduct,
-                         NameUnit = b.Name,
+                         NameUnit = b.NameUnit,
                          NameProduct = a.ProductName,
                          ProductPrice = a.ProductPrice
                      }).FirstOrDefault();
-            model.noun = context.Noun.ToList();
+            model.unit = context.Unit.ToList();
             return View(model);
             //  return View();
         }
         public IActionResult Detail_Bill(int? id)
         {
             DetailbillViewmodel model = new DetailbillViewmodel();
-            model.bill = (from b in context.Bill
-                         where b.BillNumber == id
-                         join p in context.Product on b.IdProduct equals p.IdProduct
-                         join u in context.Noun on p.IdNoun equals u.IdNoun
-                          select new Bill2Viewmodel
-                         {
-                             NameUnit = u.Name,
-                             NameProduct = p.ProductName,
-                             ProductPrice = p.ProductPrice,
-                             Count = b.Count,
-                             Discount = b.Discount
-                         }).ToList();;
-            model.sumarybill = (from a in context.SumaryBill
-                                join b in context.Bill on a.IdsumaryBill equals b.IdsumaryBill
+            model.bill_detail = (from b in context.BillDetail
+                                 where b.IdBill == id
+                                 join p in context.Product on b.IdProduct equals p.IdProduct
+                                 join u in context.Unit on p.IdUnit equals u.IdUnit
+                                 select new Bill2Viewmodel
+                                 {
+                                     NameUnit = u.NameUnit,
+                                     NameProduct = p.ProductName,
+                                     ProductPrice = p.ProductPrice,
+                                     Count = b.Count,
+                                     Discount = b.Discount
+                                 }).ToList(); ;
+            model.bill = (from a in context.Bill
+                                join b in context.Bill on a.IdBill equals b.IdBill
                                 select new billViewmodel
                                 {
                                     Date = a.Date,
@@ -150,16 +151,16 @@ namespace Shop.Controllers
         public IActionResult Update([FromBody] Unitparam model)
         {
             int check_update = 1;
-            IQueryable<Unit> json_data = from a in context.Noun
-                                         where model.Name == a.Name
-                                         select new Unit { Name = a.Name };
+            IQueryable<Unitviewmodel> json_data = from a in context.Unit
+                                         where model.Name == a.NameUnit
+                                         select new Unitviewmodel { NameUnit = a.NameUnit };
             if (json_data.Count() == 0)
             {
-                var result = context.Noun.SingleOrDefault(b => b.IdNoun == model.IdNoun);
+                var result = context.Unit.SingleOrDefault(b => b.IdUnit == model.IdNoun);
 
                 if (result != null)
                 {
-                    result.Name = model.Name;
+                    result.NameUnit = model.Name;
                     context.SaveChanges();
                 }
             }
@@ -179,7 +180,7 @@ namespace Shop.Controllers
             {
                 result.ProductName = model.ProductName;
                 result.ProductPrice = model.ProductPrice;
-                result.IdNoun = model.IdNoun;
+                result.IdUnit = model.IdNoun;
                 context.SaveChanges();
             }
             return Json(result);
@@ -190,7 +191,7 @@ namespace Shop.Controllers
         }
         public IActionResult Add_Product_Page()
         {
-            var Noun = context.Noun.ToList();
+            var Noun = context.Unit.ToList();
 
             return View(Noun);
         }
@@ -198,18 +199,18 @@ namespace Shop.Controllers
         public IActionResult Insert_Unit([FromBody] Unitparam model)
         {
             int checked_insert = 1;
-            var result = context.Noun.Where(a => a.Name == model.Name).Count();
+            var result = context.Unit.Where(a => a.NameUnit == model.Name).Count();
             if (result != 0)
             {
                 checked_insert = 0;
             }
             else if (result == 0)
             {
-                var nou = new Noun()
+                var nou = new Unit()
                 {
-                    Name = model.Name
+                    NameUnit = model.Name
                 };
-                context.Noun.Add(nou);
+                context.Unit.Add(nou);
                 context.SaveChanges();
 
             }
@@ -222,7 +223,7 @@ namespace Shop.Controllers
             {
                 ProductName = model.ProductName,
                 ProductPrice = model.ProductPrice,
-                IdNoun = model.IdNoun
+                IdUnit = model.IdNoun
 
             };
             context.Product.Add(product);
@@ -232,10 +233,10 @@ namespace Shop.Controllers
 
         public IActionResult Delete([FromBody] Unitparam model)
         {
-            var del = context.Noun.Where(o => o.IdNoun == model.IdNoun).FirstOrDefault();
+            var del = context.Unit.Where(o => o.IdUnit == model.IdNoun).FirstOrDefault();
             if (del != null)
             {
-                context.Noun.Remove(del);
+                context.Unit.Remove(del);
             }
             context.SaveChanges();
             return Json(del);

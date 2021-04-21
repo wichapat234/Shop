@@ -18,7 +18,7 @@
 
                 <th rowspan="2" colspan="3"> </th>
                 <th>เลขบิล </th>
-                <th>Bill-00@(Model.sumarybill.Bill_Number)</th>
+                <th>Bill-00@(Model.bill.Bill_Number)</th>
             </tr>
             <tr>
 
@@ -40,11 +40,11 @@
         <tbody>
 
             @{
-                foreach (var data in Model.bill)
+                foreach (var data in Model.bill_detail)
                 {
                     <tr>
                         <td> @data.NameProduct</td>
-                        <td> @data.Count / @data.NameUnit</td>
+                        @*<td> @data.Count / @data.NameUnit</td>*@
                         <td> @data.ProductPrice</td>
                         <td> @data.Discount</td>
                         <td> @(data.ProductPrice-@data.Discount)</td>
@@ -58,17 +58,17 @@
             <tr>
                 <th rowspan="3" colspan="3"> </th>
                 <th>ราคารววมก่อนส่วนลด </th>
-                <th>@Model.sumarybill.Price_Before</th>
+                <th>@Model.bill.Price_Before</th>
             </tr>
             <tr>
 
                 <th>ส่วนลดทั้งหมด </th>
-                <th>@Model.sumarybill.Discount</th>
+                <th>@Model.bill.Discount</th>
             </tr>
             <tr>
 
                 <th>ราคารวมทั้งหมด </th>
-                <th>@Model.sumarybill.Price_After</th>
+                <th>@Model.bill.Price_After</th>
             </tr>
 
         </tbody>
