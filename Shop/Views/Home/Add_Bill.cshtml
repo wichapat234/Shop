@@ -1,53 +1,150 @@
 ﻿@using Shop.ViewModels
-@model GetdatabillViewmodel
+@model DetailbillViewmodel
 
 @{
     ViewData["Title"] = "เพิ่มบิล";
 }
-<div class="text-center">
-    <h1>@ViewData["Title"]</h1>
-</div>
-<div class="text-center">
-    <input type='button' value='เพิ่มรายการ' id='add_bill' />
-    <table border="1" class="center">
-        <thead>
-            <tr>
-                <th> ชื่อสินค้า </th>
-                <th> หน่วย </th>
-                <th> ราคา/หน่วย </th>
-                <th> จำนวน </th>
-                <th> ราคารวม </th>
-                <th> ส่วนลด </th>
-                <th> ราคารวมหลังส่วนลด </th>
-            </tr>
-        </thead>
-        <tbody id="table_add_bill">
-            @*<tr>
-                <td>
-                    <select name="name_product" id="select_product" onchange="Data_product();">
-                        <option id="select">เลือกสินค้า</option>
+<body>
+    <div class="text-center">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div class="text-center">
+        <button id="add_bill">เพิ่มรายการ</button>
 
-                        @{
-                            foreach (var data in Model)
-                            {
-                                <option value="@data.IdProduct">@data.ProductName</option>
+        <table border="1" class="center" id="Mytable" value="">
+            <thead>
+                <tr>
+                    <th> ชื่อสินค้า </th>
+                    <th> หน่วย </th>
+                    <th> ราคา/หน่วย </th>
+                    <th> จำนวน </th>
+                    <th> ราคารวม </th>
+                    <th> ส่วนลด </th>
+                    <th> ราคารวมหลังส่วนลด </th>
+                </tr>
+            </thead>
+            <tbody id="table_add_bill">
+
+                @*<td>
+                        <select name="name_product" id="select_product" onchange="Data_pduct();">
+                            <option id="select">เลือกสินค้า</option>
+
+                            @{
+                                foreach (var data in Model)
+                                {
+                                    <option value="@data.IdProduct">@data.ProductName</option>
+                                }
                             }
-                        }
-                    </select>
-                </td>
-                <td id="unit"></td>
-                <td id="price"></td>
-                <td><input type="number" value=" " id="count" onkeyup="Data_product()"></td>
-                <td id="total"></td>
-                <td><input type="number" value=" " id="discount" onkeyup="Data_product()"></td>
-                <td id="last_total"></td>
-            </tr>*@
-
-        </tbody>
-    </table>
+                        </select>
+                    </td>
+                    <td id="unit"></td>
+                    <td id="price"></td>
+                    <td><input type="number" value=" " id="count" onkeyup="Data_product()"></td>
+                    <td id="total"></td>
+                    <td><input type="number" value=" " id="discount" onkeyup="Data_product()"></td>
+                    <td id="last_total"></td>*@
 
 
-</div>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        addrow()
+
+    });
+
+
+
+    function addrow() {
+        axios({
+            method: 'Get',
+            url: '/Home/GatdataProduct',
+        })
+            .then(function (response) {
+                var count = 0;
+                document.getElementById("add_bill").onclick = function () {
+                    count += 1;
+                   // console.logc(count)
+                    var Table = document.getElementById('Mytable');
+                    var TableRow = Table.insertRow(-1);
+
+                    @*var Valueselect = document.getElementById('selectvalue')
+                    console.log(Valueselect)
+                    if (Valueselect != null) {
+                        var Valueselect1 = document.getElementById('selectvalue').value
+                    } else {
+                        var Valueselect1 = 0;
+                    }*@
+
+                   // var value_selectlist = check();
+                  //  console.log(value_selectlist)
+                    var selectList = document.createElement("select");
+                    selectList.id = "selectvalue"+count;
+                    selectList.setAttribute("onchange", "check();");
+
+                    var value_selectlist = check();
+                    alert(value_selectlist)
+
+                    for (var i = 0; i < response.data.product.length; i++) {
+                        var option = document.createElement("option");
+                        option.value = response.data.product[i].product_Id;
+                        option.text = response.data.product[i].nameProduct;
+                        selectList.appendChild(option);
+                    }
+
+                    var currentCell = TableRow.insertCell(-1);
+                    currentCell.appendChild(selectList);
+                }
+
+
+
+            });
+
+
+
+    }
+
+    function check() {
+        var count = 0;
+        count += 1;
+        var value1 = document.getElementById("selectvalue" + count).value;
+        alert(value1)
+        return value1;
+    }
+
+        @*$("#add_bill").on('click', function () {
+            axios({
+                method: 'post',
+                url: '/Home/Get_dataProduct',
+            })
+                .then(function (response) {
+                    // console.log(response.data.billdetail);
+                    var i = 0;
+                    var table = "";
+                    table += '<tr>'
+                    table += '< td ><select name="name_product" id="select_product' + response.data.billdetail.idBillDetail + '" onchange="Data_product(' + response.data.billdetail.idBillDetail + '); Resetinput(' + response.data.billdetail.idBillDetail + ');"><option id="select">เลือกสินค้า</option>'
+                    for (i = 0; i < response.data.product.length; {
+                        table += '< option value='+ response.data.product[i].idProduct + '>' + response.data.product[i].productName + '</option>'
+                    }
+                    table += '</td ></select >'
+                    table += '< td id = "unit" ></td > '
+                    table += '< td id = "price" ></td > '
+                    table += '< td > <input type="number" value="" id="count' + response.data.billdetail.idBillDetail + '" onkeyup="Data_product()"></td>'
+                    table += '< td id = "total" ></td > '
+                    table += '< td > <input type="number" value="" id="discount' + response.data.billdetail.idBillDetail + '" onkeyup="Data_product()"></td>'
+                    table += '< td id = "last_total" ></td > '
+                    table += '</tr > '
+                    $('#table_add_bill').append(table);
+                    // Data_product(response.data.billdetail.idBillDetail );
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        });*@
+    @*});*@
+</script>
 <style>
     table {
         width: 100%;

@@ -25,6 +25,7 @@ namespace Shop.ViewModels
     {
         public List<Bill2Viewmodel> bill_detail { get; set; }
         public billViewmodel bill { get; set; }
+        public List<EditProductViewmodel> product { get; set; }
     }
     public class Bill2Viewmodel
     {

@@ -3,77 +3,45 @@
 
 // Write your JavaScript code.
 
-$(document).ready(function () {
-
-    $("#add_bill").on('click', function () {
-        axios({
-            method: 'post',
-            url: '/Home/Get_dataProduct',
-        })
-            .then(function (response) {
-               // console.log(response.data.billdetail);
-                var i = 0;
-                var table = "";
-                table += '<tr>'
-                table += '<td><select name="name_product" id="select_product' + response.data.billdetail.idBillDetail + '" onchange="Data_product(); Resetinput();" > <option id="select">เลือกสินค้า</option>'
-                for (i = 0; i < response.data.product.length; i++) {
-                    table += '<option value="' + response.data.product[i].idProduct + '">' + response.data.product[i].productName +'</option>'
-                }
-                table += '</td></select>'
-                table += '<td id="unit"></td>'
-                table += '<td id="price"></td>'
-                table += '<td><input type="number" value="" id="count" onkeyup="Data_product()"></td>'
-                table += '<td id="total"></td>'
-                table += '<td><input type="number" value="" id="discount" onkeyup="Data_product()"></td>'
-                table += '<td id="last_total"></td>'
-                table += '</tr>'
-                $('#table_add_bill').append(table);
-                //Data_product(response.data.billdetail.idBillDetail );
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    });
-});
 function Edit_Unit(id) {
     document.location = 'Edit_Unit_Page/?id=' + id;
 }
 
-function Resetinput() {
-    document.getElementById('count').value = ""
-    document.getElementById('discount').value = ""
+function Resetinput(id) {
+    document.getElementById('count'+id).value = ""
+    document.getElementById('discount'+id).value = ""
 }
 function Data_product() {
-    $("#select").remove();
-    //var iddata = id;
-    var id_product = document.getElementById('select_product' + iddata).value;
-    var count = document.getElementById('count').value;
-    var discount = document.getElementById('discount').value;
-    var id = parseInt(id_product)
-    var obj = { IdProduct: id }
-    axios({
-        method: 'post',
-        url: '/Home/Data_Product_Select',
-        data: obj
-    })
-        .then(function (response) {
-            console.log(response.data.length);
-            var i = 0;
-            var total = 0;
-            var last_total = 0;
-            total = count * response.data[0].productPrice;
-            last_total = total - discount;
-            document.getElementById("unit").innerHTML = response.data[0].nameUnit;
-            document.getElementById("price").innerHTML = response.data[0].productPrice;
-            document.getElementById("total").innerHTML = total;
-            document.getElementById("last_total").innerHTML = last_total;
-            for (i = 0; i < response.data.length; i++) {
+    //$("#select").remove();
+    ////var iddata = id;
+    //var id_product = document.getElementById('select_product' + iddata).value;
+    //var count = document.getElementById('count').value;
+    //var discount = document.getElementById('discount').value;
+    //var id = parseInt(id_product)
+    //var obj = { IdProduct: id }
+    //axios({
+    //    method: 'post',
+    //    url: '/Home/Data_Product_Select',
+    //    data: obj
+    //})
+    //    .then(function (response) {
+    //        console.log(response.data.length);
+    //        var i = 0;
+    //        var total = 0;
+    //        var last_total = 0;
+    //        total = count * response.data[0].productPrice;
+    //        last_total = total - discount;
+    //        document.getElementById("unit").innerHTML = response.data[0].nameUnit;
+    //        document.getElementById("price").innerHTML = response.data[0].productPrice;
+    //        document.getElementById("total").innerHTML = total;
+    //        document.getElementById("last_total").innerHTML = last_total;
+    //        for (i = 0; i < response.data.length; i++) {
 
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    //        }
+    //    })
+    //    .catch(function (error) {
+    //        console.log(error);
+    //    });
 }
 function Edit_product(id) {
     document.location = 'Edit_Product_Page/?id=' + id;

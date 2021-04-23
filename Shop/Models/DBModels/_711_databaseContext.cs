@@ -69,10 +69,6 @@ namespace Shop.Models.DBModels
                 entity.HasIndex(e => e.IdBill)
                     .HasName("idsumary_bill_idx");
 
-                entity.HasIndex(e => e.IdBillDetail)
-                    .HasName("idBill_UNIQUE")
-                    .IsUnique();
-
                 entity.HasIndex(e => e.IdProduct)
                     .HasName("fk_bill_product1_idx");
 
@@ -93,12 +89,14 @@ namespace Shop.Models.DBModels
                 entity.HasOne(d => d.IdBillNavigation)
                     .WithMany(p => p.BillDetail)
                     .HasForeignKey(d => d.IdBill)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("id_bill");
 
                 entity.HasOne(d => d.IdProductNavigation)
                     .WithMany(p => p.BillDetail)
                     .HasForeignKey(d => d.IdProduct)
-                    .HasConstraintName("fk_bill_product1");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("id_product");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -120,6 +118,7 @@ namespace Shop.Models.DBModels
                 entity.Property(e => e.IdUnit).HasColumnName("id_unit");
 
                 entity.Property(e => e.ProductName)
+                    .IsRequired()
                     .HasColumnName("product_name")
                     .HasColumnType("varchar(45)")
                     .HasCharSet("utf8mb4")

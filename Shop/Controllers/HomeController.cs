@@ -54,23 +54,50 @@ namespace Shop.Controllers
         }
         public IActionResult Add_Bill()
         {
+            //DetailbillViewmodel model = new DetailbillViewmodel();
+            //model.product = (from a in context.Product
+            //                 orderby a.IdProduct
+            //                 join b in context.Unit on a.IdUnit equals b.IdUnit
+            //                 select new EditProductViewmodel
+            //                 {
+            //                     Product_Id = a.IdProduct,
+            //                     NameUnit = b.NameUnit,
+            //                     NameProduct = a.ProductName,
+            //                     ProductPrice = a.ProductPrice
+            //                 }).ToList();
 
-            return View();
+
+            return View(); ;
         }
-        public IActionResult Get_dataProduct()
+        public IActionResult GatdataProduct()
         {
-            //Products model = new Products();
-            var bill = new BillDetail()
-            {
-                IdBill = 1
-            };
-            context.BillDetail.Add(bill);
-            context.SaveChanges();
-            GetdatabillViewmodel model = new GetdatabillViewmodel();
-            model.billdetail = context.BillDetail.OrderByDescending(b=>b.IdBillDetail).FirstOrDefault();
-            model.product = context.Product.ToList();
+            DetailbillViewmodel model = new DetailbillViewmodel();
+            model.product = (from a in context.Product
+                             join b in context.Unit on a.IdUnit equals b.IdUnit
+                             select new EditProductViewmodel
+                             {
+                                 Product_Id = a.IdProduct,
+                                 NameUnit = b.NameUnit,
+                                 NameProduct = a.ProductName,
+                                 ProductPrice = a.ProductPrice
+                             }).ToList();
             return Json(model);
         }
+        //}
+        //public IActionResult Get_dataProduct()
+        //{
+        //    //Products model = new Products();
+        //    //var bill = new BillDetail()
+        //    //{
+        //    //    IdBill = 1
+        //    //};
+        //    //context.BillDetail.Add(bill);
+        //    //context.SaveChanges();
+        //    GetdatabillViewmodel model = new GetdatabillViewmodel();
+        //    model.billdetail = context.BillDetail.OrderByDescending(b => b.IdBillDetail).FirstOrDefault();
+        //    model.product = context.Product.ToList();
+        //    return Json(model);
+        //}
         public IActionResult Data_Product_Select([FromBody] Productsparam model)
         {
             var json_data = from a in context.Product
@@ -136,15 +163,15 @@ namespace Shop.Controllers
                                      Discount = b.Discount
                                  }).ToList(); ;
             model.bill = (from a in context.Bill
-                                join b in context.Bill on a.IdBill equals b.IdBill
-                                select new billViewmodel
-                                {
-                                    Date = a.Date,
-                                    Bill_Number = a.BillNumber,
-                                    Price_Before = a.PriceBefore,
-                                    Price_After = a.PriceAfter,
-                                    Discount = a.TotalDiscount
-                                }).FirstOrDefault();
+                          join b in context.Bill on a.IdBill equals b.IdBill
+                          select new billViewmodel
+                          {
+                              Date = a.Date,
+                              Bill_Number = a.BillNumber,
+                              Price_Before = a.PriceBefore,
+                              Price_After = a.PriceAfter,
+                              Discount = a.TotalDiscount
+                          }).FirstOrDefault();
             return View(model);
         }
 
@@ -152,8 +179,8 @@ namespace Shop.Controllers
         {
             int check_update = 1;
             IQueryable<Unitviewmodel> json_data = from a in context.Unit
-                                         where model.Name == a.NameUnit
-                                         select new Unitviewmodel { NameUnit = a.NameUnit };
+                                                  where model.Name == a.NameUnit
+                                                  select new Unitviewmodel { NameUnit = a.NameUnit };
             if (json_data.Count() == 0)
             {
                 var result = context.Unit.SingleOrDefault(b => b.IdUnit == model.IdNoun);
