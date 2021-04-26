@@ -100,8 +100,8 @@ function Save_Product() {
     console.log(ProductPrice)
     console.log(IdNoun)
     var idunit = parseInt(IdNoun)
-    var price = parseInt(ProductPrice)
-    if (name.trim().length == " " && ProductPrice.trim().length == " ") {
+    var price = parseFloat(ProductPrice)
+    if (name.trim() =="" && ProductPrice.trim() == "") {
         $('#validate_add_unit').text('กรอกข้อความ')
         $('#add_unit').css("border", "1px solid red");
     } else {
@@ -128,6 +128,7 @@ function Update(id) {
         $('#validate_edit_unit').text('กรอกข้อความ')
         $('#unitEdit').css("border", "1px solid red");
     } else {
+        Update_Product
         var obj = { IdNoun: id, Name: name }
         axios({
             method: 'post',
@@ -154,9 +155,9 @@ function Update_Product(id) {
     var price = document.getElementById('edit_price').value;
     var unit = document.getElementById('edit_unit').value;
     var idpro = parseInt(id)
-    var price = parseInt(price)
+    var price = parseFloat(price)
     var unit = parseInt(unit)
-    if (name_product.trim().length == "" && price.trim().length == "") {
+    if (name_product.trim()== "" && price.trim() == "") {
         $('#validate_edit_nameproduct').text('กรอกข้อความ')
         $('#edit_product').css("border", "1px solid red");
         $('#validate_edit_price').text('กรอกข้อความ')

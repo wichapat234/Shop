@@ -9,11 +9,11 @@
         <h1>@ViewData["Title"]</h1>
     </div>
     <div class="header col-3">
-        <b>หมายเลขบิล : </b>
-        <b id="bill_number"> Bill-0001</b>
+        <label>หมายเลขบิล : </label>
+        <h id="bill_number"> Bill-0001</h>
         <br>
-        <b> วันที่ : </b>
-        <b id="date"></b>
+        <label> วันที่ : </label>
+        <h id="date"></h>
     </div>
 
 
@@ -36,25 +36,22 @@
             </tbody>
         </table>
         <br><br><br>
-        <table class="ft">
-            <tr>
-                <th>ราคารวมก่อนส่วนลด :</th>
-                <th id="sum_after_discount">0</th>
-                <th>บาท</th>
-            </tr>
-            <tr>
-                <th>ส่วนลดทั้งหมด :</th>
-                <th id="total_discount">0</th>
-                <th>บาท</th>
-            </tr>
-            <tr>
-                <th>ราคารวมทั้งหมด :</th>
-                <th id="sum_before_discount">0</th>
-                <th>บาท</th>
-            </tr>
-
-        </table>
-        <button id="save_bill" onclick="save_bill();">บันทึกรายการ</button>
+        <label class="ft">
+            ราคารวมก่อนส่วนลด :
+            <h id="sum_after_discount">
+            </h>
+        </label>
+        <br>
+        <label class="ft">
+            ส่วนลดทั้งหมด :
+            <h id="total_discount">
+            </h>
+        </label>
+        <br>
+        <label class="ft">
+            ราคารวมทั้งหมด :
+            <h id="sum_before_discount"></h>
+        </label>
     </div>
 
 
@@ -66,24 +63,6 @@
         setdate();
     });
 
-    function save_bill() {
-        // alert("OK")
-        //  var obj = { IdNoun: id, Name: name }
-        axios({
-            method: 'post',
-            url: '/Home/List_Bill',
-            data: obj
-        })
-            .then(function (response) {
-                console.log(response);
-
-                window.location = '/Home/List_Unit';
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
-
     function setdate() {
         let n = new Date();
         let y = n.getFullYear() + 543;
@@ -92,48 +71,13 @@
         document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
 
     }
-
-    function Calculate_Sum(count) {
-        var sum_cal = 0;
-        for (var i = 1; i <= count; i++) { //Calculate Sum
-            let sum_value = document.getElementById("sum" + i).innerHTML
-            if (sum_value == "") {
-                sum_value = 0;
-            }
-            console.log(sum_value)
-            var sum_int = parseFloat(sum_value);
-            sum_cal += sum_int;
-        }
-        document.getElementById("sum_after_discount").innerHTML = sum_cal.toFixed(2)
-    }
-
-    function Calculate_Discount(count) {
-        var dis_cal = 0;
-        for (var i = 1; i <= count; i++) { //Calculate Discount
-            let dis_value = document.getElementById("discount" + i).value
-            if (dis_value == "") {
-                dis_value = 0;
-            }
-            var dis_int = parseFloat(dis_value);
-            dis_cal += dis_int;
-        }
-        document.getElementById("total_discount").innerHTML = dis_cal
-    }
-
-    function Calculate_Total() {
-        let dis_total = document.getElementById("total_discount").innerHTML //Calculate Total
-        let sum_af = document.getElementById("sum_after_discount").innerHTML
-        let sum_bf = sum_af - dis_total
-        document.getElementById("sum_before_discount").innerHTML = sum_bf.toFixed(2)
-    }
-
     function addrow() {
         axios({
             method: 'Get',
             url: '/Home/GatdataProduct',
         })
             .then(function (response) {
-                //   console.log(response.data.product)
+                console.log(response.data.product)
                 var count = 0;
                 document.getElementById("add_bill").onclick = function () {
                     count += 1;
@@ -143,28 +87,23 @@
                     //**Stat Create Select Option **//
                     var selectList = document.createElement("select");
                     selectList.id = "selectvalue" + count;
-                    const cache = count;
                     selectList.onchange = function () { //ฟังก์ชัน OnChange สินค้า
-                        //  let value_id = this.id;
-                        var value1 = document.getElementById("selectvalue" + cache).value
-                        for (let x = 0; x < response.data.product.length; x++) {
-                            if (value1 == response.data.product[x].product_Id) {
-                                document.getElementById("unit" + cache).innerHTML = response.data.product[x].nameUnit;
-                                document.getElementById("price" + cache).innerHTML = response.data.product[x].productPrice;
+                        var value1 = document.getElementById("selectvalue" + count).value
+                        console.log(value1)
+                        var idele = document.getElementById("selectvalue" + count)
+                        console.log(idele)
+
+                        for (var i = 0; i < response.data.product.length; i++) {
+                            if (value1 == response.data.product[i].product_Id) {
+                                document.getElementById("unit" + count).innerHTML = response.data.product[i].nameUnit;
+                                document.getElementById("price" + count).innerHTML = response.data.product[i].productPrice;
                             }
                         }
-                        document.getElementById("count" + cache).value = "";
-                        document.getElementById("discount" + cache).value = "";
-                        document.getElementById("sum" + cache).innerHTML = 0;
-                        document.getElementById("total" + cache).innerHTML = 0;
-
-
-
-                        Calculate_Sum(count);
-                        Calculate_Discount(count);
-                        Calculate_Total();
+                        var idele = document.getElementById("selectvalue" + count)
+                        console.log(idele)
+                        document.getElementById("count" + count).value = "";
+                        document.getElementById("discount" + count).value = "";
                     }
-
                     var option1 = document.createElement("option");
                     option1.id = "select" + count;
                     option1.text = "เลือกสินค้า";
@@ -182,17 +121,11 @@
                     input_count.type = "number";
                     input_count.value = "";
                     input_count.onkeyup = function () { //ฟังก์ชัน OnKeyUp จำนวน
-
-                        let count_product = document.getElementById("count" + cache).value
-                        let price_product = document.getElementById("price" + cache).innerHTML
-                        let count_pro = parseInt(count_product)
-                        let price = parseFloat(price_product)
+                        let count_product = document.getElementById("count" + count).value
+                        let price_product = document.getElementById("price" + count).innerHTML
                         let sum_product = 0;
-                        sum_product = price * count_pro;
-                        //   console.log(sum_product)
-                        document.getElementById("sum" + cache).innerHTML = sum_product.toFixed(2)
-
-                        Calculate_Sum(count);
+                        sum_product = count_product * price_product;
+                        document.getElementById("sum" + count).innerHTML = sum_product
                     }
 
                     var unit = document.createElement("h"); //สร้าง element แสดง หน่วยสินค้า
@@ -212,15 +145,11 @@
                     discount.value = "";
                     discount.type = "number";
                     discount.onkeyup = function () { //ฟังก์ชัน OnKeyUp ส่วนลด
-                        let sum_product = document.getElementById("sum" + cache).innerHTML
-                        let discount_product = document.getElementById("discount" + cache).value
+                        let sum_product = document.getElementById("sum" + count).innerHTML
+                        let discount_product = document.getElementById("discount" + count).value
                         let total_product = 0;
                         total_product = sum_product - discount_product;
-                        document.getElementById("total" + cache).innerHTML = total_product
-
-                        Calculate_Discount(count);
-                        Calculate_Total();
-
+                        document.getElementById("total" + count).innerHTML = total_product
                     }
 
                     var total = document.createElement("h"); //สร้าง element แสดง ราคาทั้งหมด
@@ -248,34 +177,31 @@
 
                     currentCell = TableRow.insertCell(-1);
                     currentCell.appendChild(total); //รวมราคาทั้งหมด ราคารวม-ส่วนลด
-
                 }
-
             });
     }
 </script>
 <style>
+    table {
+        width: 100%;
+        height: 50px;
+    }
 
+        table th {
+            height: 50px;
+        }
+
+        table td {
+            height: 40px;
+        }
 
     .header {
+        @*background-color: red ;*@
+        margin-left: 900px ;
+    }
+    .ft{
+        @*background-color: red;*@ 
         margin-left: 900px;
-    }
-
-    .ft {
-        margin-left: 780px;
-        width: 30%;
-    }
-
-    .center {
-        width: 100%;
-    }
-
-    th {
-        height: 50px
-    }
-
-    td {
-        height: 50px
     }
 </style>
 
