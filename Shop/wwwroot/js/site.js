@@ -6,43 +6,6 @@
 function Edit_Unit(id) {
     document.location = 'Edit_Unit_Page/?id=' + id;
 }
-
-function Resetinput(id) {
-    document.getElementById('count'+id).value = ""
-    document.getElementById('discount'+id).value = ""
-}
-function Data_product() {
-    //$("#select").remove();
-    ////var iddata = id;
-    //var id_product = document.getElementById('select_product' + iddata).value;
-    //var count = document.getElementById('count').value;
-    //var discount = document.getElementById('discount').value;
-    //var id = parseInt(id_product)
-    //var obj = { IdProduct: id }
-    //axios({
-    //    method: 'post',
-    //    url: '/Home/Data_Product_Select',
-    //    data: obj
-    //})
-    //    .then(function (response) {
-    //        console.log(response.data.length);
-    //        var i = 0;
-    //        var total = 0;
-    //        var last_total = 0;
-    //        total = count * response.data[0].productPrice;
-    //        last_total = total - discount;
-    //        document.getElementById("unit").innerHTML = response.data[0].nameUnit;
-    //        document.getElementById("price").innerHTML = response.data[0].productPrice;
-    //        document.getElementById("total").innerHTML = total;
-    //        document.getElementById("last_total").innerHTML = last_total;
-    //        for (i = 0; i < response.data.length; i++) {
-
-    //        }
-    //    })
-    //    .catch(function (error) {
-    //        console.log(error);
-    //    });
-}
 function Edit_product(id) {
     document.location = 'Edit_Product_Page/?id=' + id;
 }
@@ -106,6 +69,7 @@ function Save_Product() {
         $('#add_unit').css("border", "1px solid red");
     } else {
         var obj = { ProductPrice: price, ProductName: ProductName, IdNoun: idunit }
+        console.log(obj)
         axios({
             method: 'post',
             url: '/Home/Insert_Product',
@@ -124,12 +88,11 @@ function Save_Product() {
 function Update(id) {
     var name = document.getElementById('unitEdit').value;
     console.log(name)
-    if (name.trim().length == "") {
+    if (name.trim() == "") {
         $('#validate_edit_unit').text('กรอกข้อความ')
         $('#unitEdit').css("border", "1px solid red");
     } else {
-        Update_Product
-        var obj = { IdNoun: id, Name: name }
+       var obj = { IdNoun: id, Name: name }
         axios({
             method: 'post',
             url: '/Home/Update',

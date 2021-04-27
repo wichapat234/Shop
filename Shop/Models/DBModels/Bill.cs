@@ -14,7 +14,6 @@ namespace Shop.Models.DBModels
         public double PriceBefore { get; set; }
         public double TotalDiscount { get; set; }
         public double PriceAfter { get; set; }
-        public int BillNumber { get; set; }
         public DateTime Date { get; set; }
 
         public virtual ICollection<BillDetail> BillDetail { get; set; }

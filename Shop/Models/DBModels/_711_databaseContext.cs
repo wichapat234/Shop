@@ -38,15 +38,7 @@ namespace Shop.Models.DBModels
 
                 entity.ToTable("bill");
 
-                entity.HasIndex(e => e.BillNumber)
-                    .HasName("bill_number_UNIQUE")
-                    .IsUnique();
-
                 entity.Property(e => e.IdBill).HasColumnName("id_bill");
-
-                entity.Property(e => e.BillNumber)
-                    .HasColumnName("bill_number")
-                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Date)
                     .HasColumnName("date")
@@ -89,13 +81,11 @@ namespace Shop.Models.DBModels
                 entity.HasOne(d => d.IdBillNavigation)
                     .WithMany(p => p.BillDetail)
                     .HasForeignKey(d => d.IdBill)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("id_bill");
 
                 entity.HasOne(d => d.IdProductNavigation)
                     .WithMany(p => p.BillDetail)
                     .HasForeignKey(d => d.IdProduct)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("id_product");
             });
 

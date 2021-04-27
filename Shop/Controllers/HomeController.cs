@@ -21,19 +21,18 @@ namespace Shop.Controllers
         }
         public IActionResult List_Bill()
         {
-            var product = from a in context.Bill
-                          join b in context.Bill on a.IdBill equals b.IdBill
-                          select new billViewmodel
-                          {
-                              Id_Summary = a.IdBill,
-                              Date = a.Date,
-                              Bill_Number = a.BillNumber,
-                              Price_Before = a.PriceBefore,
-                              Price_After = a.PriceAfter,
-                              Discount = a.TotalDiscount
-                          };
+            //var product = from a in context.Bill
+            //              join b in context.Bill on a.IdBill equals b.IdBill
+            //              select new billViewmodel
+            //              {
+            //                  Id_Summary = a.IdBill,
+            //                  Date = a.Date,
+            //                  Price_Before = a.PriceBefore,
+            //                  Price_After = a.PriceAfter,
+            //                  Discount = a.TotalDiscount
+            //              };
 
-            return View(product);
+            return View();
         }
         public IActionResult List_Product()
         {
@@ -54,20 +53,28 @@ namespace Shop.Controllers
         }
         public IActionResult Add_Bill()
         {
-            //DetailbillViewmodel model = new DetailbillViewmodel();
-            //model.product = (from a in context.Product
-            //                 orderby a.IdProduct
-            //                 join b in context.Unit on a.IdUnit equals b.IdUnit
-            //                 select new EditProductViewmodel
-            //                 {
-            //                     Product_Id = a.IdProduct,
-            //                     NameUnit = b.NameUnit,
-            //                     NameProduct = a.ProductName,
-            //                     ProductPrice = a.ProductPrice
-            //                 }).ToList();
-
 
             return View(); ;
+        }
+        [HttpPost]
+        public IActionResult insert_detail_bill([FromBody] bill_detailparam model)
+        {
+            var billdetails = new BillDetail()
+            {
+                IdProduct = model.IdProduct,
+                //Count = model.Count,
+                //Discount = model.Discount,
+                //TotalPrice = model.TotalPrice,
+                //LastPrice = model.LastPrice,
+                //IdBill = 1
+
+            };
+            context.BillDetail.Add(billdetails);
+            context.SaveChanges();
+
+
+
+            return Json(billdetails);
         }
         public IActionResult GatdataProduct()
         {
@@ -83,21 +90,7 @@ namespace Shop.Controllers
                              }).ToList();
             return Json(model);
         }
-        //}
-        //public IActionResult Get_dataProduct()
-        //{
-        //    //Products model = new Products();
-        //    //var bill = new BillDetail()
-        //    //{
-        //    //    IdBill = 1
-        //    //};
-        //    //context.BillDetail.Add(bill);
-        //    //context.SaveChanges();
-        //    GetdatabillViewmodel model = new GetdatabillViewmodel();
-        //    model.billdetail = context.BillDetail.OrderByDescending(b => b.IdBillDetail).FirstOrDefault();
-        //    model.product = context.Product.ToList();
-        //    return Json(model);
-        //}
+        [HttpPost]
         public IActionResult Data_Product_Select([FromBody] Productsparam model)
         {
             var json_data = from a in context.Product
@@ -167,7 +160,6 @@ namespace Shop.Controllers
                           select new billViewmodel
                           {
                               Date = a.Date,
-                              Bill_Number = a.BillNumber,
                               Price_Before = a.PriceBefore,
                               Price_After = a.PriceAfter,
                               Discount = a.TotalDiscount

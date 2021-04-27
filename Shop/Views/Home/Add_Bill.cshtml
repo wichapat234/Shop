@@ -54,7 +54,7 @@
             </tr>
 
         </table>
-        <button id="save_bill" onclick="save_bill();">บันทึกรายการ</button>
+        <button id="save_bill">บันทึกรายการ</button>
     </div>
 
 
@@ -64,24 +64,34 @@
     $(document).ready(function () {
         addrow();
         setdate();
+        //   save_bill();
     });
 
-    function save_bill() {
+    function save_bill(count) {
+        //for (let i = 0; i<count;) {
+        //    let sum_p = document.getElementById("sum" + i).innerHTML
+        //    console.log(sum_p)
+        //}
+        // alert(count)
+        //document.getElementById("save_bill").onclick = function () {
+        //    alert("1324")
+        //}
         // alert("OK")
-        //  var obj = { IdNoun: id, Name: name }
-        axios({
-            method: 'post',
-            url: '/Home/List_Bill',
-            data: obj
-        })
-            .then(function (response) {
-                console.log(response);
 
-                window.location = '/Home/List_Unit';
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        //  var obj = { IdNoun: id, Name: name }
+        //axios({
+        //    method: 'post',
+        //    url: '/Home/List_Bill',
+        //    data: obj
+        //})
+        //    .then(function (response) {
+        //        console.log(response);
+
+        //        window.location = '/Home/List_Unit';
+        //    })
+        //    .catch(function (error) {
+        //        console.log(error);
+        //    });
     }
 
     function setdate() {
@@ -100,7 +110,7 @@
             if (sum_value == "") {
                 sum_value = 0;
             }
-            console.log(sum_value)
+            // console.log(sum_value)
             var sum_int = parseFloat(sum_value);
             sum_cal += sum_int;
         }
@@ -133,7 +143,7 @@
             url: '/Home/GatdataProduct',
         })
             .then(function (response) {
-                //   console.log(response.data.product)
+                console.log(response.data.product)
                 var count = 0;
                 document.getElementById("add_bill").onclick = function () {
                     count += 1;
@@ -157,8 +167,6 @@
                         document.getElementById("discount" + cache).value = "";
                         document.getElementById("sum" + cache).innerHTML = 0;
                         document.getElementById("total" + cache).innerHTML = 0;
-
-
 
                         Calculate_Sum(count);
                         Calculate_Discount(count);
@@ -189,9 +197,7 @@
                         let price = parseFloat(price_product)
                         let sum_product = 0;
                         sum_product = price * count_pro;
-                        //   console.log(sum_product)
                         document.getElementById("sum" + cache).innerHTML = sum_product.toFixed(2)
-
                         Calculate_Sum(count);
                     }
 
@@ -248,6 +254,54 @@
 
                     currentCell = TableRow.insertCell(-1);
                     currentCell.appendChild(total); //รวมราคาทั้งหมด ราคารวม-ส่วนลด
+
+                    document.getElementById("save_bill").onclick = function () {
+
+                        const arry = [];
+                        for (var i = 1; i <= count; i++) {
+                            var sum_p = document.getElementById("sum" + i).innerHTML
+                            var dis_p = document.getElementById("discount" + i).value
+                            var total_p = document.getElementById("total" + i).innerHTML
+                            var count_p = document.getElementById("count" + i).value
+                            var value_p = document.getElementById("selectvalue" + i).value
+                            var id_pro = parseInt(value_p)
+                            var count_pro = parseInt(count_p)
+                            var dis_pro = parseFloat(dis_p)
+                            var sum_pro = parseFloat(sum_p)
+                            var total_pro = parseFloat(total_p)
+
+                            var idpro = { IdProduct: id_pro, Count: count_pro, Discount: dis_pro, TotalPrice: sum_pro, LastPrice: total_pro }
+                           
+                            arry.push(idpro)
+                        }
+                        console.log(arry)
+                      //  var obj = JSON.stringify(arry)
+                        var obj = { IdProduct: 38 }
+                        const headers = {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'JWT fefege...'
+                        }
+                        axios({
+                            method: 'post',
+                            dataType: 'json',
+                            url: '/Home/insert_detail_bill ',
+                            headers: headers,
+                            data: obj
+                        })
+                            .then(function (response) {
+                                console.log(response);
+                                alert("OK")
+                              //  window.location.reload();
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+
+
+
+                    }
+
+
 
                 }
 
