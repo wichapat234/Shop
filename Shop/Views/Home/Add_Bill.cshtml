@@ -64,36 +64,7 @@
     $(document).ready(function () {
         addrow();
         setdate();
-        //   save_bill();
     });
-
-    function save_bill(count) {
-        //for (let i = 0; i<count;) {
-        //    let sum_p = document.getElementById("sum" + i).innerHTML
-        //    console.log(sum_p)
-        //}
-        // alert(count)
-        //document.getElementById("save_bill").onclick = function () {
-        //    alert("1324")
-        //}
-        // alert("OK")
-
-        //  var obj = { IdNoun: id, Name: name }
-        //axios({
-        //    method: 'post',
-        //    url: '/Home/List_Bill',
-        //    data: obj
-        //})
-        //    .then(function (response) {
-        //        console.log(response);
-
-        //        window.location = '/Home/List_Unit';
-        //    })
-        //    .catch(function (error) {
-        //        console.log(error);
-        //    });
-    }
-
     function setdate() {
         let n = new Date();
         let y = n.getFullYear() + 543;
@@ -269,24 +240,37 @@
                             var dis_pro = parseFloat(dis_p)
                             var sum_pro = parseFloat(sum_p)
                             var total_pro = parseFloat(total_p)
-
-                            var idpro = { IdProduct: id_pro, Count: count_pro, Discount: dis_pro, TotalPrice: sum_pro, LastPrice: total_pro }
-                           
+                            var idpro = { IdProduct: id_pro, Count: count_pro, Discount: dis_pro, TotalPrice: sum_pro, LastPrice: total_pro }                         
                             arry.push(idpro)
                         }
-                        console.log(arry)
-                      //  var obj = JSON.stringify(arry)
-                        var obj = { IdProduct: 38 }
-                        const headers = {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'JWT fefege...'
-                        }
+
+                        var sum_af_dis = document.getElementById("sum_after_discount").innerHTML
+                        var sum_total_dis = document.getElementById("total_discount").innerHTML
+                        var sum_bf_dis = document.getElementById("sum_before_discount").innerHTML
+                        var sad = parseFloat(sum_af_dis)
+                        var std = parseFloat(sum_total_dis)
+                        var sbf = parseFloat(sum_bf_dis)
+                        var obj = { PriceBefore: sbf, TotalDiscount: std, PriceAfter: sad }
+                        axios({
+                            method: 'post',
+                            dataType: 'json',
+                            url: '/Home/insert_bill ',
+                            data: obj
+                        })
+                            .then(function (response) {
+                                console.log(response);
+                                alert("OK")
+                                //  window.location.reload();
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+
                         axios({
                             method: 'post',
                             dataType: 'json',
                             url: '/Home/insert_detail_bill ',
-                            headers: headers,
-                            data: obj
+                            data: arry
                         })
                             .then(function (response) {
                                 console.log(response);
@@ -296,8 +280,6 @@
                             .catch(function (error) {
                                 console.log(error);
                             });
-
-
 
                     }
 

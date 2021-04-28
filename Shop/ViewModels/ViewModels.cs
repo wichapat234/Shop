@@ -6,7 +6,25 @@ using Shop.Models.DBModels;
 
 namespace Shop.ViewModels
 {
-    public class bill_detail
+    public class billparams
+    {
+        public double PriceBefore { get; set; }
+        public double TotalDiscount { get; set; }
+        public double PriceAfter { get; set; }
+        public DateTime Date { get; set; }
+
+    }
+    public class bill_totalViewmodel
+    {
+        public int IdBill { get; set; }
+        public double PriceBefore { get; set; }
+        public double TotalDiscount { get; set; }
+        public double PriceAfter { get; set; }
+        public DateTime Date { get; set; }
+
+    }
+
+    public class bill_detailparam
     {
         public int IdProduct { get; set; }
         public int Count { get; set; }
@@ -16,47 +34,34 @@ namespace Shop.ViewModels
         public int IdBill { get; set; }
 
     }
-    public class bill_detailparam
-    {
-        public int IdProduct { get; set; } 
-        //public int Count { get; set; }
-        //public double Discount { get; set; }
-        //public double TotalPrice { get; set; }
-        //public double LastPrice { get; set; }
-        //public int IdBill { get; set; }
-
-    }
     public class billViewmodel
     {
-        public int Id_Summary { get; set; }
-        public DateTime? Date { get; set; }
-        public double Price_Before { get; set; }
-        public double Price_After { get; set; }
-        public double Discount { get; set; }
+        public List<Bill> bill { get; set; }
 
     }
-    public class GetdatabillViewmodel
+    //public class GetdatabillViewmodel
+    //{
+    //    public List<Product> product { get; set; }
+    //    public BillDetail billdetail { get; set; }
+    //}
+    public class DetailbillViewmodel
     {
-        public List<Product> product { get; set; }
-        public BillDetail billdetail { get; set; }
-    }
-    public class DetailbillViewmodel 
-    {
-        public List<Bill2Viewmodel> bill_detail { get; set; }
-        public billViewmodel bill { get; set; }
+
+        public List<BillproductViewmodel> bill_detail { get; set; }
         public List<EditProductViewmodel> product { get; set; }
+        public bill_totalViewmodel bill_total { get; set; }
     }
-    public class Bill2Viewmodel
+    public class BillproductViewmodel
     {
-        
+
         public double? Discount { get; set; }
         public string NameProduct { get; set; }
         public string NameUnit { get; set; }
         public double ProductPrice { get; set; }
+        public double totalPrice { get; set; }
         public int? Count { get; set; }
 
     }
-
 
     public class EditProductViewmodel
     {

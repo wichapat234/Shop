@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Shop.ViewModels
+@model billViewmodel
+
+@{
     ViewData["Title"] = "รายการบิล";
 }
 
@@ -22,20 +25,19 @@
             </tr>
         </thead>
         <tbody>
-            @{ if (Model != null)
-                {
-                    foreach (var data in Model)
-                    {
+
+                    @{ foreach (var data in Model.bill)
+                        {
                         <tr>
                             <td>@data.Date.ToString("dd/MM/yyyy")</td>
-                            <td>Bill-00@(data.Id_Summary)</td>
-                            <td>@data.Price_Before</td>
-                            <td>@data.Price_After</td>
-                            <td>@data.Discount</td>
-                            <td> <input type="button" name="detail" onClick='Detail_Bill(@data.Id_Summary)' value="รายละเอียด"></td>
+                            <td>Bill-00@(data.IdBill)</td>
+                            <td>@data.PriceAfter</td>
+                            <td>@data.TotalDiscount</td>
+                            <td>@data.PriceBefore</td>
+                            <td> <input type="button" name="detail" onClick='Detail_Bill(@data.IdBill)' value="รายละเอียด"></td>
                         </tr>
                     }
-                }
+                
             }
         </tbody>
     </table>

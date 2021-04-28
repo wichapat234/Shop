@@ -58,9 +58,6 @@ namespace Shop.Models.DBModels
 
                 entity.ToTable("bill_detail");
 
-                entity.HasIndex(e => e.IdBill)
-                    .HasName("idsumary_bill_idx");
-
                 entity.HasIndex(e => e.IdProduct)
                     .HasName("fk_bill_product1_idx");
 
@@ -78,14 +75,10 @@ namespace Shop.Models.DBModels
 
                 entity.Property(e => e.TotalPrice).HasColumnName("total_price");
 
-                entity.HasOne(d => d.IdBillNavigation)
-                    .WithMany(p => p.BillDetail)
-                    .HasForeignKey(d => d.IdBill)
-                    .HasConstraintName("id_bill");
-
                 entity.HasOne(d => d.IdProductNavigation)
                     .WithMany(p => p.BillDetail)
                     .HasForeignKey(d => d.IdProduct)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("id_product");
             });
 

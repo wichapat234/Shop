@@ -21,18 +21,24 @@ namespace Shop.Controllers
         }
         public IActionResult List_Bill()
         {
-            //var product = from a in context.Bill
-            //              join b in context.Bill on a.IdBill equals b.IdBill
-            //              select new billViewmodel
-            //              {
-            //                  Id_Summary = a.IdBill,
-            //                  Date = a.Date,
-            //                  Price_Before = a.PriceBefore,
-            //                  Price_After = a.PriceAfter,
-            //                  Discount = a.TotalDiscount
-            //              };
+            billViewmodel model = new billViewmodel();
+            model.bill = context.Bill.ToList();
+            return View(model);
+        }
+        public IActionResult insert_bill([FromBody] billparams model)
+        {
+            var bill = new Bill()
+            {
+                PriceAfter = model.PriceAfter,
+                TotalDiscount = model.TotalDiscount,
+                PriceBefore = model.PriceBefore,
+                Date = DateTime.Now
 
-            return View();
+            };
+            context.Bill.Add(bill);
+            context.SaveChanges();
+
+            return Json(bill);
         }
         public IActionResult List_Product()
         {
@@ -46,9 +52,6 @@ namespace Shop.Controllers
                               NameProduct = a.ProductName,
                               ProductPrice = a.ProductPrice
                           };
-
-
-            //return Ok(product);
             return View(product);
         }
         public IActionResult Add_Bill()
@@ -56,25 +59,26 @@ namespace Shop.Controllers
 
             return View(); ;
         }
-        [HttpPost]
-        public IActionResult insert_detail_bill([FromBody] bill_detailparam model)
+        public IActionResult insert_detail_bill([FromBody] bill_detailparam[] model)
         {
-            var billdetails = new BillDetail()
+            int count1 = 1;
+
+            foreach (var data in model.ToList())
             {
-                IdProduct = model.IdProduct,
-                //Count = model.Count,
-                //Discount = model.Discount,
-                //TotalPrice = model.TotalPrice,
-                //LastPrice = model.LastPrice,
-                //IdBill = 1
+                var billdetails = new BillDetail()
+                {
 
-            };
-            context.BillDetail.Add(billdetails);
-            context.SaveChanges();
-
-
-
-            return Json(billdetails);
+                    IdProduct = data.IdProduct,
+                    Count = data.Count,
+                    Discount = data.Discount,
+                    TotalPrice = data.TotalPrice,
+                    LastPrice = data.LastPrice,
+                    IdBill = 1
+                };
+                context.BillDetail.Add(billdetails);
+                context.SaveChanges();
+            }
+            return Json(count1);
         }
         public IActionResult GatdataProduct()
         {
@@ -147,23 +151,26 @@ namespace Shop.Controllers
                                  where b.IdBill == id
                                  join p in context.Product on b.IdProduct equals p.IdProduct
                                  join u in context.Unit on p.IdUnit equals u.IdUnit
-                                 select new Bill2Viewmodel
+                                 select new BillproductViewmodel
                                  {
                                      NameUnit = u.NameUnit,
                                      NameProduct = p.ProductName,
                                      ProductPrice = p.ProductPrice,
                                      Count = b.Count,
-                                     Discount = b.Discount
+                                     Discount = b.Discount,
+                                     totalPrice = b.TotalPrice
                                  }).ToList(); ;
-            model.bill = (from a in context.Bill
-                          join b in context.Bill on a.IdBill equals b.IdBill
-                          select new billViewmodel
-                          {
-                              Date = a.Date,
-                              Price_Before = a.PriceBefore,
-                              Price_After = a.PriceAfter,
-                              Discount = a.TotalDiscount
-                          }).FirstOrDefault();
+
+            model.bill_total = (from a in context.Bill
+                                where a.IdBill == id
+                                select new bill_totalViewmodel
+                                {
+                                    IdBill = a.IdBill,
+                                    Date = a.Date,
+                                    PriceBefore = a.PriceBefore,
+                                    PriceAfter = a.PriceAfter,
+                                    TotalDiscount = a.TotalDiscount
+                                }).FirstOrDefault();
             return View(model);
         }
 
