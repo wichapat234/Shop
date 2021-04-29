@@ -25,21 +25,23 @@ namespace Shop.Controllers
             model.bill = context.Bill.ToList();
             return View(model);
         }
-        public IActionResult insert_bill([FromBody] billparams model)
-        {
-            var bill = new Bill()
-            {
-                PriceAfter = model.PriceAfter,
-                TotalDiscount = model.TotalDiscount,
-                PriceBefore = model.PriceBefore,
-                Date = DateTime.Now
+        //public IActionResult insert_bill([FromBody] billparams model)
+        //{
+        //    var bill = new Bill()
+        //    {
+        //        PriceAfter = model.PriceAfter,
+        //        TotalDiscount = model.TotalDiscount,
+        //        PriceBefore = model.PriceBefore,
+        //        Date = DateTime.Now,
+        //        NameBill = model.NameBill
 
-            };
-            context.Bill.Add(bill);
-            context.SaveChanges();
+        //    };
+        //    context.Bill.Add(bill);
+        //    context.SaveChanges();
 
-            return Json(bill);
-        }
+        //    return Json(bill);
+        //}
+
         public IActionResult List_Product()
         {
             var product = from a in context.Product
@@ -57,28 +59,63 @@ namespace Shop.Controllers
         public IActionResult Add_Bill()
         {
 
-            return View(); ;
+
+            return View(); 
         }
-        public IActionResult insert_detail_bill([FromBody] bill_detailparam[] model)
+        public IActionResult insert_detail_bill([FromBody] bill_detailparam[] model1)
         {
-            int count1 = 1;
 
-            foreach (var data in model.ToList())
+            foreach (var data in model1.ToList())               
             {
-                var billdetails = new BillDetail()
-                {
+;
 
-                    IdProduct = data.IdProduct,
-                    Count = data.Count,
-                    Discount = data.Discount,
-                    TotalPrice = data.TotalPrice,
-                    LastPrice = data.LastPrice,
-                    IdBill = 1
-                };
-                context.BillDetail.Add(billdetails);
-                context.SaveChanges();
+              //  int idbill = int.Parse("123");
+ 
+                if (data.Count != 0)
+                {
+                    var numberbill = from a in context.Bill
+                                      orderby a.IdBill descending
+                                      select new bill_idViewmodel
+                                      {
+                                          IdBill = a.IdBill
+                                      };
+                  //  int idbill = Convert.ToInt32(numberbill);
+                    int idbill = Convert.ToInt32(numberbill.FirstOrDefault().IdBill);
+
+                    var billdetails = new BillDetail()
+                    {
+
+                        IdProduct = data.IdProduct,
+                        Count = data.Count,
+                        Discount = data.Discount,
+                        TotalPrice = data.TotalPrice,
+                        LastPrice = data.LastPrice,
+                        IdBill = idbill
+
+                    };
+                    context.BillDetail.Add(billdetails);
+                    context.SaveChanges();
+
+                }
+                else
+                {
+                    var addbill = new Bill()
+                    {
+                        PriceBefore = data.PriceBefore,
+                        TotalDiscount = data.TotalDiscount,
+                        PriceAfter = data.PriceAfter,
+                        Date = DateTime.Now,
+                        NameBill = data.NameBill   
+                    };
+                    context.Bill.Add(addbill);
+                    context.SaveChanges();
+
+
+
+                }
             }
-            return Json(count1);
+
+            return Json("123");
         }
         public IActionResult GatdataProduct()
         {
@@ -92,9 +129,11 @@ namespace Shop.Controllers
                                  NameProduct = a.ProductName,
                                  ProductPrice = a.ProductPrice
                              }).ToList();
+            model.billDetail = context.BillDetail.OrderByDescending(a => a.IdBillDetail).FirstOrDefault();
+;
+
             return Json(model);
         }
-        [HttpPost]
         public IActionResult Data_Product_Select([FromBody] Productsparam model)
         {
             var json_data = from a in context.Product

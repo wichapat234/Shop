@@ -10,7 +10,7 @@
     </div>
     <div class="header col-3">
         <b>หมายเลขบิล : </b>
-        <b id="bill_number"> Bill-0001</b>
+        <b id="bill_number">Bill-XXX</b>
         <br>
         <b> วันที่ : </b>
         <b id="date"></b>
@@ -81,7 +81,6 @@
             if (sum_value == "") {
                 sum_value = 0;
             }
-            // console.log(sum_value)
             var sum_int = parseFloat(sum_value);
             sum_cal += sum_int;
         }
@@ -114,7 +113,17 @@
             url: '/Home/GatdataProduct',
         })
             .then(function (response) {
-                console.log(response.data.product)
+                console.log(response.data.billDetail)
+
+                //if (response.data.billDetail == null) {
+                //    var numbill = 0;
+                //} else {
+                //    numbill = response.data.billDetail.idBill
+                //}
+                //const str = 'Bill-'
+                //numbill++ 
+                //str2 = str + numbill++ 
+                //document.getElementById("bill_number").innerHTML = str2
                 var count = 0;
                 document.getElementById("add_bill").onclick = function () {
                     count += 1;
@@ -229,42 +238,35 @@
                     document.getElementById("save_bill").onclick = function () {
 
                         const arry = [];
+                       
+                        var sum_af_dis = document.getElementById("sum_after_discount").innerHTML
+                        var sum_total_dis = document.getElementById("total_discount").innerHTML
+                        var sum_bf_dis = document.getElementById("sum_before_discount").innerHTML
+                       /* var name_bill_str = document.getElementById("bill_number").innerHTML*/
+                        var sad = parseFloat(sum_af_dis)
+                        var std = parseFloat(sum_total_dis)
+                        var sbf = parseFloat(sum_bf_dis)
+                        var obj = { PriceBefore: sbf, TotalDiscount: std, PriceAfter: sad}
+                        arry.push(obj)
+
                         for (var i = 1; i <= count; i++) {
                             var sum_p = document.getElementById("sum" + i).innerHTML
                             var dis_p = document.getElementById("discount" + i).value
                             var total_p = document.getElementById("total" + i).innerHTML
                             var count_p = document.getElementById("count" + i).value
                             var value_p = document.getElementById("selectvalue" + i).value
+                            //var name_bill_str = document.getElementById("bill_number").innerHTML
+                            //var name_bill = name_bill_str.substring(5, 6);
+                            //var nb = parseInt(name_bill)
                             var id_pro = parseInt(value_p)
                             var count_pro = parseInt(count_p)
                             var dis_pro = parseFloat(dis_p)
                             var sum_pro = parseFloat(sum_p)
                             var total_pro = parseFloat(total_p)
-                            var idpro = { IdProduct: id_pro, Count: count_pro, Discount: dis_pro, TotalPrice: sum_pro, LastPrice: total_pro }                         
+                            var idpro = { IdProduct: id_pro, Count: count_pro, Discount: dis_pro, TotalPrice: sum_pro, LastPrice: total_pro}
                             arry.push(idpro)
                         }
-
-                        var sum_af_dis = document.getElementById("sum_after_discount").innerHTML
-                        var sum_total_dis = document.getElementById("total_discount").innerHTML
-                        var sum_bf_dis = document.getElementById("sum_before_discount").innerHTML
-                        var sad = parseFloat(sum_af_dis)
-                        var std = parseFloat(sum_total_dis)
-                        var sbf = parseFloat(sum_bf_dis)
-                        var obj = { PriceBefore: sbf, TotalDiscount: std, PriceAfter: sad }
-                        axios({
-                            method: 'post',
-                            dataType: 'json',
-                            url: '/Home/insert_bill ',
-                            data: obj
-                        })
-                            .then(function (response) {
-                                console.log(response);
-                                alert("OK")
-                                //  window.location.reload();
-                            })
-                            .catch(function (error) {
-                                console.log(error);
-                            });
+                        console.log(arry)
 
                         axios({
                             method: 'post',
@@ -275,11 +277,12 @@
                             .then(function (response) {
                                 console.log(response);
                                 alert("OK")
-                              //  window.location.reload();
                             })
                             .catch(function (error) {
                                 console.log(error);
                             });
+
+                       
 
                     }
 

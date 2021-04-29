@@ -44,6 +44,12 @@ namespace Shop.Models.DBModels
                     .HasColumnName("date")
                     .HasColumnType("date");
 
+                entity.Property(e => e.NameBill)
+                    .HasColumnName("name_bill")
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_bin");
+
                 entity.Property(e => e.PriceAfter).HasColumnName("price_after");
 
                 entity.Property(e => e.PriceBefore).HasColumnName("price_before");
@@ -57,6 +63,9 @@ namespace Shop.Models.DBModels
                     .HasName("PRIMARY");
 
                 entity.ToTable("bill_detail");
+
+                entity.HasIndex(e => e.IdBill)
+                    .HasName("id_bill_idx");
 
                 entity.HasIndex(e => e.IdProduct)
                     .HasName("fk_bill_product1_idx");
@@ -74,6 +83,12 @@ namespace Shop.Models.DBModels
                 entity.Property(e => e.LastPrice).HasColumnName("last_price");
 
                 entity.Property(e => e.TotalPrice).HasColumnName("total_price");
+
+                entity.HasOne(d => d.IdBillNavigation)
+                    .WithMany(p => p.BillDetail)
+                    .HasForeignKey(d => d.IdBill)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("id_bill");
 
                 entity.HasOne(d => d.IdProductNavigation)
                     .WithMany(p => p.BillDetail)

@@ -6,14 +6,11 @@ using Shop.Models.DBModels;
 
 namespace Shop.ViewModels
 {
-    public class billparams
+    public class bill_idViewmodel
     {
-        public double PriceBefore { get; set; }
-        public double TotalDiscount { get; set; }
-        public double PriceAfter { get; set; }
-        public DateTime Date { get; set; }
-
+        public int IdBill { get; set; }
     }
+
     public class bill_totalViewmodel
     {
         public int IdBill { get; set; }
@@ -33,23 +30,26 @@ namespace Shop.ViewModels
         public double LastPrice { get; set; }
         public int IdBill { get; set; }
 
+        public double PriceBefore { get; set; }
+        public double TotalDiscount { get; set; }
+        public double PriceAfter { get; set; }
+        public DateTime Date { get; set; }
+        public string NameBill { get; set; }
+
     }
     public class billViewmodel
     {
         public List<Bill> bill { get; set; }
 
     }
-    //public class GetdatabillViewmodel
-    //{
-    //    public List<Product> product { get; set; }
-    //    public BillDetail billdetail { get; set; }
-    //}
+
     public class DetailbillViewmodel
     {
 
         public List<BillproductViewmodel> bill_detail { get; set; }
         public List<EditProductViewmodel> product { get; set; }
         public bill_totalViewmodel bill_total { get; set; }
+        public BillDetail billDetail { get; set; }
     }
     public class BillproductViewmodel
     {

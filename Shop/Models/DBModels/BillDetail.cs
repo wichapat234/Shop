@@ -13,6 +13,7 @@ namespace Shop.Models.DBModels
         public double LastPrice { get; set; }
         public int IdBill { get; set; }
 
+        public virtual Bill IdBillNavigation { get; set; }
         public virtual Product IdProductNavigation { get; set; }
     }
 }

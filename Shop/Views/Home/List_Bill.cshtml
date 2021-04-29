@@ -10,6 +10,9 @@
 </div>
 
 <div class="text-center">
+    <label>วันที่ :</label>&nbsp;<input type="date">&nbsp;
+    <label>หมายเลขบิล :</label>&nbsp;<input type="text">&nbsp;
+    <input type='button' value='ค้นหา' id='myButton' onClick='Add_Bill()' />&nbsp;
     <input type='button' value='เพิ่มบิล' id='myButton' onClick='Add_Bill()' />
     <br>
     <br>
@@ -26,22 +29,23 @@
         </thead>
         <tbody>
 
-                    @{ foreach (var data in Model.bill)
-                        {
-                        <tr>
-                            <td>@data.Date.ToString("dd/MM/yyyy")</td>
-                            <td>Bill-00@(data.IdBill)</td>
-                            <td>@data.PriceAfter</td>
-                            <td>@data.TotalDiscount</td>
-                            <td>@data.PriceBefore</td>
-                            <td> <input type="button" name="detail" onClick='Detail_Bill(@data.IdBill)' value="รายละเอียด"></td>
-                        </tr>
-                    }
-                
+            @{ foreach (var data in Model.bill)
+                {
+                    <tr>
+                        <td>@data.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@data.NameBill</td>
+                        <td>@data.PriceAfter</td>
+                        <td>@data.TotalDiscount</td>
+                        <td>@data.PriceBefore</td>
+                        <td> <input type="button" name="detail" onClick='Detail_Bill(@data.IdBill)' value="รายละเอียด"></td>
+                    </tr>
+                }
+
             }
         </tbody>
     </table>
 </div>
+
 <style>
     table {
         width: 100%;
