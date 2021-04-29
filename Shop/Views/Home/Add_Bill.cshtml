@@ -114,16 +114,6 @@
         })
             .then(function (response) {
                 console.log(response.data.billDetail)
-
-                //if (response.data.billDetail == null) {
-                //    var numbill = 0;
-                //} else {
-                //    numbill = response.data.billDetail.idBill
-                //}
-                //const str = 'Bill-'
-                //numbill++ 
-                //str2 = str + numbill++ 
-                //document.getElementById("bill_number").innerHTML = str2
                 var count = 0;
                 document.getElementById("add_bill").onclick = function () {
                     count += 1;
@@ -275,18 +265,12 @@
                             data: arry
                         })
                             .then(function (response) {
-                                console.log(response);
-                                alert("OK")
+                                document.location = 'Detail_Bill/?id=' + response.data.idBill;
                             })
                             .catch(function (error) {
                                 console.log(error);
-                            });
-
-                       
-
+                            });                    
                     }
-
-
 
                 }
 

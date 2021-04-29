@@ -60,28 +60,22 @@ namespace Shop.Controllers
         {
 
 
-            return View(); 
+            return View();
         }
         public IActionResult insert_detail_bill([FromBody] bill_detailparam[] model1)
         {
 
-            foreach (var data in model1.ToList())               
+            foreach (var data in model1.ToList())
             {
-;
-
-              //  int idbill = int.Parse("123");
- 
                 if (data.Count != 0)
                 {
                     var numberbill = from a in context.Bill
-                                      orderby a.IdBill descending
-                                      select new bill_idViewmodel
-                                      {
-                                          IdBill = a.IdBill
-                                      };
-                  //  int idbill = Convert.ToInt32(numberbill);
+                                     orderby a.IdBill descending
+                                     select new bill_idViewmodel
+                                     {
+                                         IdBill = a.IdBill
+                                     };
                     int idbill = Convert.ToInt32(numberbill.FirstOrDefault().IdBill);
-
                     var billdetails = new BillDetail()
                     {
 
@@ -105,18 +99,24 @@ namespace Shop.Controllers
                         TotalDiscount = data.TotalDiscount,
                         PriceAfter = data.PriceAfter,
                         Date = DateTime.Now,
-                        NameBill = data.NameBill   
+                        NameBill = data.NameBill
                     };
                     context.Bill.Add(addbill);
                     context.SaveChanges();
-
-
-
                 }
+
             }
 
-            return Json("123");
+            var id = (from a in context.Bill
+                      orderby a.IdBill descending
+                      select new bill_idViewmodel
+                      {
+                          IdBill = a.IdBill
+                      }).FirstOrDefault();
+
+            return Json(id);
         }
+
         public IActionResult GatdataProduct()
         {
             DetailbillViewmodel model = new DetailbillViewmodel();
@@ -130,7 +130,7 @@ namespace Shop.Controllers
                                  ProductPrice = a.ProductPrice
                              }).ToList();
             model.billDetail = context.BillDetail.OrderByDescending(a => a.IdBillDetail).FirstOrDefault();
-;
+            ;
 
             return Json(model);
         }
