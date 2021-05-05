@@ -9,6 +9,7 @@ namespace Shop.ViewModels
     public class bill_idViewmodel
     {
         public int IdBill { get; set; }
+        public int bill { get; set; }
     }
 
     public class bill_totalViewmodel
@@ -17,24 +18,40 @@ namespace Shop.ViewModels
         public double PriceBefore { get; set; }
         public double TotalDiscount { get; set; }
         public double PriceAfter { get; set; }
+        public string NameBill { get; set; }
         public DateTime Date { get; set; }
 
     }
-
-    public class bill_detailparam
+    public class addbillViewmodel
+    {
+        public int IdBill { get; set; }
+        public double PriceBefore { get; set; }
+        public double TotalDiscount { get; set; }
+        public double PriceAfter { get; set; }
+        public DateTime Date { get; set; }
+        public string Dateformate { get; set; }
+        public string NameBill { get; set; }
+    }
+    public class addbilldetailViewmodel
     {
         public int IdProduct { get; set; }
         public int Count { get; set; }
         public double Discount { get; set; }
         public double TotalPrice { get; set; }
         public double LastPrice { get; set; }
-        public int IdBill { get; set; }
-
-        public double PriceBefore { get; set; }
-        public double TotalDiscount { get; set; }
-        public double PriceAfter { get; set; }
-        public DateTime Date { get; set; }
+    }
+    public class searchViewmodel
+    {
+        public string date { get; set; }
         public string NameBill { get; set; }
+    }
+
+
+    public class bill_detailparam
+    {
+       
+        public List<addbilldetailViewmodel> detail { get; set; }
+        public addbillViewmodel bill { get; set; }
 
     }
     public class billViewmodel

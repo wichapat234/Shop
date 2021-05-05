@@ -24,6 +24,7 @@ function Add_Unit() {
 function Add_produuct() {
     document.location = 'Add_Product_Page';
 }
+
 function Save() {
     var name = document.getElementById('add_unit').value;
     console.log(name)

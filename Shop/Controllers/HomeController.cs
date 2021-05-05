@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -14,34 +15,16 @@ namespace Shop.Controllers
     public class HomeController : Controller
     {
         private _711_databaseContext context;
-
+        private DateTime datemodel;
+        private string format;
         public HomeController(_711_databaseContext context)
         {
             this.context = context;
         }
         public IActionResult List_Bill()
         {
-            billViewmodel model = new billViewmodel();
-            model.bill = context.Bill.ToList();
-            return View(model);
+            return View();
         }
-        //public IActionResult insert_bill([FromBody] billparams model)
-        //{
-        //    var bill = new Bill()
-        //    {
-        //        PriceAfter = model.PriceAfter,
-        //        TotalDiscount = model.TotalDiscount,
-        //        PriceBefore = model.PriceBefore,
-        //        Date = DateTime.Now,
-        //        NameBill = model.NameBill
-
-        //    };
-        //    context.Bill.Add(bill);
-        //    context.SaveChanges();
-
-        //    return Json(bill);
-        //}
-
         public IActionResult List_Product()
         {
             var product = from a in context.Product
@@ -56,65 +39,91 @@ namespace Shop.Controllers
                           };
             return View(product);
         }
+        public IActionResult Get_Listbill([FromBody] searchViewmodel model)
+        {
+            if (model.date != "")
+            {
+                 format = "yyyy-MM-dd";
+                CultureInfo provider = CultureInfo.InvariantCulture;
+                provider = new CultureInfo("fr-FR");
+                datemodel = DateTime.ParseExact(model.date, format, provider);
+                //datemodel = DateTime.Parse(model.date.ToString());
+            }
+
+            var product = (from a in context.Bill
+                           where (a.NameBill.Contains(model.NameBill) && model.date == "") ||
+                                  (model.NameBill != "" && model.date != "" && a.Date == datemodel && a.NameBill.Contains(model.NameBill)) ||
+                                  (model.date != "" && model.NameBill == "" && a.Date == datemodel)
+
+                           select new addbillViewmodel
+                           {
+                               IdBill = a.IdBill,
+                               PriceBefore = a.PriceBefore,
+                               TotalDiscount = a.TotalDiscount,
+                               PriceAfter = a.PriceAfter,
+                               Dateformate = a.DateFormate,
+                               NameBill = a.NameBill
+
+                           }).ToList();
+            return Json(product);
+        }
         public IActionResult Add_Bill()
         {
 
-
             return View();
         }
-        public IActionResult insert_detail_bill([FromBody] bill_detailparam[] model1)
+        public IActionResult insert_detail_bill([FromBody] bill_detailparam model1)
         {
+            int id, sumid;
+            var idbill = (from b in context.Bill
+                          orderby b.IdBill descending
+                          select new bill_idViewmodel
+                          {
+                              bill = b.IdBill
+                          }).FirstOrDefault(); // เปลี่ยนวิธี *****
 
-            foreach (var data in model1.ToList())
+            if (idbill == null)
             {
-                if (data.Count != 0)
+                id = 0;
+            }
+            else
+            {
+                id = idbill.bill;
+            }
+            sumid = id + 1; //แก้ชื่อ sumid *****
+
+            var name = "Bill-";
+            var namebill = name + sumid; //เปลี่ยนชื่อ col namebill *****
+            var bill = new Bill()
+            {
+                PriceBefore = model1.bill.PriceBefore,
+                TotalDiscount = model1.bill.TotalDiscount,
+                PriceAfter = model1.bill.PriceAfter,
+                Date = model1.bill.Date,
+                NameBill = namebill,
+                IdBill = sumid
+            };
+            context.Bill.Add(bill);
+            context.SaveChanges();
+
+            foreach (var data in model1.detail.ToList())
+            {
+                var billdetails = new BillDetail()
                 {
-                    var numberbill = from a in context.Bill
-                                     orderby a.IdBill descending
-                                     select new bill_idViewmodel
-                                     {
-                                         IdBill = a.IdBill
-                                     };
-                    int idbill = Convert.ToInt32(numberbill.FirstOrDefault().IdBill);
-                    var billdetails = new BillDetail()
-                    {
 
-                        IdProduct = data.IdProduct,
-                        Count = data.Count,
-                        Discount = data.Discount,
-                        TotalPrice = data.TotalPrice,
-                        LastPrice = data.LastPrice,
-                        IdBill = idbill
+                    IdProduct = data.IdProduct,
+                    Count = data.Count,
+                    Discount = data.Discount,
+                    TotalPrice = data.TotalPrice,
+                    LastPrice = data.LastPrice,
+                    IdBill = sumid
 
-                    };
-                    context.BillDetail.Add(billdetails);
-                    context.SaveChanges();
-
-                }
-                else
-                {
-                    var addbill = new Bill()
-                    {
-                        PriceBefore = data.PriceBefore,
-                        TotalDiscount = data.TotalDiscount,
-                        PriceAfter = data.PriceAfter,
-                        Date = DateTime.Now,
-                        NameBill = data.NameBill
-                    };
-                    context.Bill.Add(addbill);
-                    context.SaveChanges();
-                }
+                };
+                context.BillDetail.Add(billdetails);
+                context.SaveChanges();
 
             }
-
-            var id = (from a in context.Bill
-                      orderby a.IdBill descending
-                      select new bill_idViewmodel
-                      {
-                          IdBill = a.IdBill
-                      }).FirstOrDefault();
-
-            return Json(id);
+            return Json(sumid);
         }
 
         public IActionResult GatdataProduct()
@@ -204,8 +213,8 @@ namespace Shop.Controllers
                                 where a.IdBill == id
                                 select new bill_totalViewmodel
                                 {
-                                    IdBill = a.IdBill,
                                     Date = a.Date,
+                                    NameBill = a.NameBill,
                                     PriceBefore = a.PriceBefore,
                                     PriceAfter = a.PriceAfter,
                                     TotalDiscount = a.TotalDiscount

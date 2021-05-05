@@ -10,13 +10,13 @@
 </div>
 
 <div class="text-center">
-    <label>วันที่ :</label>&nbsp;<input type="date">&nbsp;
-    <label>หมายเลขบิล :</label>&nbsp;<input type="text">&nbsp;
-    <input type='button' value='ค้นหา' id='myButton' onClick='Add_Bill()' />&nbsp;
+    <label>วันที่ :</label>&nbsp;<input type="date" id="date">&nbsp;
+    <label>หมายเลขบิล :</label>&nbsp;<input type="text" id="bill">&nbsp;
+    <input type='button' value='ค้นหา' id='myButton' onClick='show_and_search_bill()' />&nbsp;
     <input type='button' value='เพิ่มบิล' id='myButton' onClick='Add_Bill()' />
     <br>
     <br>
-    <table border="1">
+    <table border="1" id="Mytable">
         <thead>
             <tr>
                 <th> วันที่ </th>
@@ -27,25 +27,61 @@
                 <th> รายละเอียด </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="body1">
 
-            @{ foreach (var data in Model.bill)
-                {
-                    <tr>
-                        <td>@data.Date.ToString("dd/MM/yyyy")</td>
-                        <td>@data.IdBill</td>
-                        <td>@data.PriceAfter</td>
-                        <td>@data.TotalDiscount</td>
-                        <td>@data.PriceBefore</td>
-                        <td> <input type="button" name="detail" onClick='Detail_Bill(@data.IdBill)' value="รายละเอียด"></td>
-                    </tr>
-                }
+            @*@{ foreach (var data in Model.bill)
+                    {
+                        <tr>
+                            <td id="date">@data.Date.Value.ToString("dd/MM/yyyy")</td>
+                            <td id="name">@data.NameBill</td>
+                            <td id="PA">@data.PriceAfter</td>
+                            <td id="TD">@data.TotalDiscount</td>
+                            <td id="PB">@data.PriceBefore</td>
+                            <td> <input type="button" name="detail" onClick='Detail_Bill(@data.IdBill)' value="รายละเอียด"></td>
+                        </tr>
+                    }
 
-            }
+                }*@
         </tbody>
     </table>
 </div>
+<script>
+    $(document).ready(function () {
+        show_and_search_bill();
+    });
 
+
+    function show_and_search_bill() {
+        var bill = document.getElementById('bill').value;
+        var date = document.getElementById('date').value;
+        console.log(date)
+        var obj = { NameBill: bill, date:date}
+        axios({
+            method: 'post',
+            url: '/Home/Get_Listbill',
+            data: obj,
+        })
+            .then(function (response) {
+                console.log(response);
+                var x = "";
+                response.data.forEach(function (element) {
+                    x += '<tr>';
+                    x += '<td>' + element.dateformate + '</td>';
+                    x += '<td>' + element.nameBill + '</td>';
+                    x += '<td>' + element.priceBefore + '</td>';
+                    x += '<td>' + element.totalDiscount + '</td>';
+                    x += '<td>' + element.priceAfter + '</td>';
+                    x += '<td><input type="button" name="detail" onClick="Detail_Bill('+element.idBill+')" value="รายละเอียด"></td>';
+                    x += '</tr>';
+                });
+                document.getElementById("body1").innerHTML = x;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    }
+</script>
 <style>
     table {
         width: 100%;
