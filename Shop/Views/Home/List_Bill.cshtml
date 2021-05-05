@@ -55,7 +55,7 @@
         var bill = document.getElementById('bill').value;
         var date = document.getElementById('date').value;
         console.log(date)
-        var obj = { NameBill: bill, date:date}
+        var obj = { NumberBill: bill, date:date}
         axios({
             method: 'post',
             url: '/Home/Get_Listbill',
@@ -67,7 +67,7 @@
                 response.data.forEach(function (element) {
                     x += '<tr>';
                     x += '<td>' + element.dateformate + '</td>';
-                    x += '<td>' + element.nameBill + '</td>';
+                    x += '<td>' + element.numberBill + '</td>';
                     x += '<td>' + element.priceBefore + '</td>';
                     x += '<td>' + element.totalDiscount + '</td>';
                     x += '<td>' + element.priceAfter + '</td>';

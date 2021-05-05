@@ -43,17 +43,16 @@ namespace Shop.Controllers
         {
             if (model.date != "")
             {
-                 format = "yyyy-MM-dd";
+                format = "yyyy-MM-dd";
                 CultureInfo provider = CultureInfo.InvariantCulture;
                 provider = new CultureInfo("fr-FR");
                 datemodel = DateTime.ParseExact(model.date, format, provider);
-                //datemodel = DateTime.Parse(model.date.ToString());
             }
 
             var product = (from a in context.Bill
-                           where (a.NameBill.Contains(model.NameBill) && model.date == "") ||
-                                  (model.NameBill != "" && model.date != "" && a.Date == datemodel && a.NameBill.Contains(model.NameBill)) ||
-                                  (model.date != "" && model.NameBill == "" && a.Date == datemodel)
+                           where (a.NumberBill.Contains(model.NumberBill) && model.date == "") ||
+                                  (model.NumberBill != "" && model.date != "" && a.Date == datemodel && a.NumberBill.Contains(model.NumberBill)) ||
+                                  (model.date != "" && model.NumberBill == "" && a.Date == datemodel)
 
                            select new addbillViewmodel
                            {
@@ -62,7 +61,7 @@ namespace Shop.Controllers
                                TotalDiscount = a.TotalDiscount,
                                PriceAfter = a.PriceAfter,
                                Dateformate = a.DateFormate,
-                               NameBill = a.NameBill
+                               NumberBill = a.NumberBill
 
                            }).ToList();
             return Json(product);
@@ -74,37 +73,38 @@ namespace Shop.Controllers
         }
         public IActionResult insert_detail_bill([FromBody] bill_detailparam model1)
         {
-            int id, sumid;
-            var idbill = (from b in context.Bill
+            // try catch , roll Back ***********
+            int numberbill;
+            var number = (from b in context.Bill
                           orderby b.IdBill descending
                           select new bill_idViewmodel
                           {
                               bill = b.IdBill
-                          }).FirstOrDefault(); // เปลี่ยนวิธี *****
+                          }).FirstOrDefault(); 
 
-            if (idbill == null)
+            if (number == null)
             {
-                id = 0;
+                numberbill = 0;
             }
             else
             {
-                id = idbill.bill;
+                numberbill = number.bill;
             }
-            sumid = id + 1; //แก้ชื่อ sumid *****
 
             var name = "Bill-";
-            var namebill = name + sumid; //เปลี่ยนชื่อ col namebill *****
+            var NumberBill = name + numberbill; //เปลี่ยนชื่อ col namebill *****
             var bill = new Bill()
             {
                 PriceBefore = model1.bill.PriceBefore,
                 TotalDiscount = model1.bill.TotalDiscount,
                 PriceAfter = model1.bill.PriceAfter,
                 Date = model1.bill.Date,
-                NameBill = namebill,
-                IdBill = sumid
+                NumberBill = NumberBill,
             };
             context.Bill.Add(bill);
             context.SaveChanges();
+
+            int idbilltest = bill.IdBill;
 
             foreach (var data in model1.detail.ToList())
             {
@@ -116,14 +116,14 @@ namespace Shop.Controllers
                     Discount = data.Discount,
                     TotalPrice = data.TotalPrice,
                     LastPrice = data.LastPrice,
-                    IdBill = sumid
+                    IdBill = idbilltest
 
                 };
                 context.BillDetail.Add(billdetails);
                 context.SaveChanges();
 
             }
-            return Json(sumid);
+            return Json(idbilltest);
         }
 
         public IActionResult GatdataProduct()
@@ -214,7 +214,7 @@ namespace Shop.Controllers
                                 select new bill_totalViewmodel
                                 {
                                     Date = a.Date,
-                                    NameBill = a.NameBill,
+                                    NumberBill = a.NumberBill,
                                     PriceBefore = a.PriceBefore,
                                     PriceAfter = a.PriceAfter,
                                     TotalDiscount = a.TotalDiscount
@@ -222,7 +222,7 @@ namespace Shop.Controllers
             return View(model);
         }
 
-        public IActionResult Update([FromBody] Unitparam model)
+        public IActionResult Update([FromBody] Unitparam model)  //แก้ภายในให้ถูก **********
         {
             int check_update = 1;
             IQueryable<Unitviewmodel> json_data = from a in context.Unit
@@ -246,7 +246,7 @@ namespace Shop.Controllers
 
             return Json(check_update);
         }
-        public IActionResult Update_Product([FromBody] Productsparam model)
+        public IActionResult Update_Product([FromBody] Productsparam model) //แก้ภายในให้ถูก **********
         {
             var result = context.Product.SingleOrDefault(b => b.IdProduct == model.IdProduct);
 
@@ -270,7 +270,7 @@ namespace Shop.Controllers
             return View(Noun);
         }
 
-        public IActionResult Insert_Unit([FromBody] Unitparam model)
+        public IActionResult Insert_Unit([FromBody] Unitparam model) //case ตัวใหญ่ตัวเล็ก **************
         {
             int checked_insert = 1;
             var result = context.Unit.Where(a => a.NameUnit == model.Name).Count();
@@ -291,7 +291,7 @@ namespace Shop.Controllers
             return Json(checked_insert);
         }
 
-        public IActionResult Insert_Product([FromBody] Productsparam model)
+        public IActionResult Insert_Product([FromBody] Productsparam model) //format return **********
         {
             var product = new Product()
             {
@@ -305,7 +305,7 @@ namespace Shop.Controllers
             return Json(product);
         }
 
-        public IActionResult Delete([FromBody] Unitparam model)
+        public IActionResult Delete([FromBody] Unitparam model) //format return เช็ตเคสลบ**********
         {
             var del = context.Unit.Where(o => o.IdUnit == model.IdNoun).FirstOrDefault();
             if (del != null)
@@ -315,7 +315,7 @@ namespace Shop.Controllers
             context.SaveChanges();
             return Json(del);
         }
-        public IActionResult Delete_Product([FromBody] Productsparam model)
+        public IActionResult Delete_Product([FromBody] Productsparam model) //format return เช็ตเคสลบ **********
         {
             var del = context.Product.Where(o => o.IdProduct == model.IdProduct).FirstOrDefault();
             if (del != null)

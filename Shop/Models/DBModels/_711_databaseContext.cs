@@ -44,9 +44,9 @@ namespace Shop.Models.DBModels
                     .HasColumnName("date")
                     .HasColumnType("date");
 
-                entity.Property(e => e.NameBill)
+                entity.Property(e => e.NumberBill)
                     .IsRequired()
-                    .HasColumnName("name_bill")
+                    .HasColumnName("number_bill")
                     .HasColumnType("varchar(45)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_bin");

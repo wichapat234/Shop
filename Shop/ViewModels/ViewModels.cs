@@ -18,7 +18,7 @@ namespace Shop.ViewModels
         public double PriceBefore { get; set; }
         public double TotalDiscount { get; set; }
         public double PriceAfter { get; set; }
-        public string NameBill { get; set; }
+        public string NumberBill { get; set; }
         public DateTime Date { get; set; }
 
     }
@@ -30,7 +30,7 @@ namespace Shop.ViewModels
         public double PriceAfter { get; set; }
         public DateTime Date { get; set; }
         public string Dateformate { get; set; }
-        public string NameBill { get; set; }
+        public string NumberBill { get; set; }
     }
     public class addbilldetailViewmodel
     {
@@ -43,7 +43,7 @@ namespace Shop.ViewModels
     public class searchViewmodel
     {
         public string date { get; set; }
-        public string NameBill { get; set; }
+        public string NumberBill { get; set; }
     }
 
 

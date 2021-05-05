@@ -15,8 +15,8 @@ namespace Shop.Models.DBModels
         public double TotalDiscount { get; set; }
         public double PriceAfter { get; set; }
         public DateTime Date { get; set; }
-        public string NameBill { get; set; }
         public string DateFormate => $"{Date.ToString("dd/MM/yyyy")}";
+        public string NumberBill { get; set; }
 
         public virtual ICollection<BillDetail> BillDetail { get; set; }
     }
