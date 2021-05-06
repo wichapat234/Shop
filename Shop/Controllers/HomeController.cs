@@ -45,12 +45,14 @@ namespace Shop.Controllers
             {
                 format = "yyyy-MM-dd";
                 CultureInfo provider = CultureInfo.InvariantCulture;
-                provider = new CultureInfo("fr-FR");
+                provider = new CultureInfo("en-US");
                 datemodel = DateTime.ParseExact(model.date, format, provider);
+
+                // datemodel = DateTime.Parse(model.date.ToString());
             }
 
             var product = (from a in context.Bill
-                           where (a.NumberBill.Contains(model.NumberBill) && model.date == "") ||
+                           where  (a.NumberBill.Contains(model.NumberBill) && model.date == "") ||
                                   (model.NumberBill != "" && model.date != "" && a.Date == datemodel && a.NumberBill.Contains(model.NumberBill)) ||
                                   (model.date != "" && model.NumberBill == "" && a.Date == datemodel)
 
@@ -76,7 +78,7 @@ namespace Shop.Controllers
             // try catch , roll Back ***********
             int numberbill;
             var number = (from b in context.Bill
-                          orderby b.IdBill descending
+                          orderby b.IdBill descending  // count row insert numberbill
                           select new bill_idViewmodel
                           {
                               bill = b.IdBill
@@ -92,7 +94,7 @@ namespace Shop.Controllers
             }
 
             var name = "Bill-";
-            var NumberBill = name + numberbill; //เปลี่ยนชื่อ col namebill *****
+            var NumberBill = name + numberbill; 
             var bill = new Bill()
             {
                 PriceBefore = model1.bill.PriceBefore,
@@ -104,7 +106,7 @@ namespace Shop.Controllers
             context.Bill.Add(bill);
             context.SaveChanges();
 
-            int idbilltest = bill.IdBill;
+            int idbill = bill.IdBill;
 
             foreach (var data in model1.detail.ToList())
             {
@@ -116,14 +118,14 @@ namespace Shop.Controllers
                     Discount = data.Discount,
                     TotalPrice = data.TotalPrice,
                     LastPrice = data.LastPrice,
-                    IdBill = idbilltest
+                    IdBill = idbill
 
                 };
                 context.BillDetail.Add(billdetails);
                 context.SaveChanges();
 
             }
-            return Json(idbilltest);
+            return Json(idbill);
         }
 
         public IActionResult GatdataProduct()
@@ -138,8 +140,8 @@ namespace Shop.Controllers
                                  NameProduct = a.ProductName,
                                  ProductPrice = a.ProductPrice
                              }).ToList();
-            model.billDetail = context.BillDetail.OrderByDescending(a => a.IdBillDetail).FirstOrDefault();
-            ;
+           // model.billDetail = context.BillDetail.OrderByDescending(a => a.IdBillDetail).FirstOrDefault();
+            
 
             return Json(model);
         }
@@ -167,29 +169,50 @@ namespace Shop.Controllers
         }
         public IActionResult Edit_Unit_Page(int? id)
         {
+
             var json_data = from a in context.Unit
                             where a.IdUnit == id
                             select new Unitviewmodel { IdUnit = a.IdUnit, NameUnit = a.NameUnit };
             return View(json_data);
             ///   return View();
         }
+        public IActionResult Check_Edit_Unit([FromBody] Unitparam model)
+        {
+            var status = "";
+            var edit = context.Unit.Where(o => o.IdUnit == model.IdUnit).FirstOrDefault();
+            if (edit != null)
+            {
+                status = "Seccess";
+            }
+            else
+            {
+                status = "Fail";
+            }
+            var data = new { edit, status};
+
+              return Json(data);
+        }
+
+
+
         public IActionResult Edit_Product_Page(int? id)
         {
             //   int idproduct = id;
             EditProductViewmodel model = new EditProductViewmodel();
-            model = (from a in context.Product
-                     where a.IdProduct == id
-                     join b in context.Unit on a.IdUnit equals b.IdUnit
-                     select new EditProductViewmodel
-                     {
-                         IdUnit = a.IdUnit,
-                         Product_Id = a.IdProduct,
-                         NameUnit = b.NameUnit,
-                         NameProduct = a.ProductName,
-                         ProductPrice = a.ProductPrice
-                     }).FirstOrDefault();
-            model.unit = context.Unit.ToList();
+                model = (from a in context.Product
+                         where a.IdProduct == id
+                         join b in context.Unit on a.IdUnit equals b.IdUnit
+                         select new EditProductViewmodel
+                         {
+                             IdUnit = a.IdUnit,
+                             Product_Id = a.IdProduct,
+                             NameUnit = b.NameUnit,
+                             NameProduct = a.ProductName,
+                             ProductPrice = a.ProductPrice
+                         }).FirstOrDefault();
+                model.unit = context.Unit.ToList();
             return View(model);
+                
             //  return View();
         }
         public IActionResult Detail_Bill(int? id)
@@ -230,7 +253,7 @@ namespace Shop.Controllers
                                                   select new Unitviewmodel { NameUnit = a.NameUnit };
             if (json_data.Count() == 0)
             {
-                var result = context.Unit.SingleOrDefault(b => b.IdUnit == model.IdNoun);
+                var result = context.Unit.SingleOrDefault(b => b.IdUnit == model.IdUnit);
 
                 if (result != null)
                 {
@@ -248,16 +271,21 @@ namespace Shop.Controllers
         }
         public IActionResult Update_Product([FromBody] Productsparam model) //แก้ภายในให้ถูก **********
         {
+            var status = "";
             var result = context.Product.SingleOrDefault(b => b.IdProduct == model.IdProduct);
-
             if (result != null)
             {
                 result.ProductName = model.ProductName;
                 result.ProductPrice = model.ProductPrice;
-                result.IdUnit = model.IdNoun;
+                result.IdUnit = model.IdUnit;
                 context.SaveChanges();
+                 status = "Seccess";
             }
-            return Json(result);
+            else
+            {
+                 status = "Fail";
+            }
+            return Json(status);
         }
         public IActionResult Add_Unit_Page()
         {
@@ -293,11 +321,12 @@ namespace Shop.Controllers
 
         public IActionResult Insert_Product([FromBody] Productsparam model) //format return **********
         {
+
             var product = new Product()
             {
                 ProductName = model.ProductName,
                 ProductPrice = model.ProductPrice,
-                IdUnit = model.IdNoun
+                IdUnit = model.IdUnit
 
             };
             context.Product.Add(product);
@@ -305,25 +334,40 @@ namespace Shop.Controllers
             return Json(product);
         }
 
-        public IActionResult Delete([FromBody] Unitparam model) //format return เช็ตเคสลบ**********
+        public IActionResult Delete([FromBody] Unitparam model) //format return เช็ตเคสลบ********** t
         {
-            var del = context.Unit.Where(o => o.IdUnit == model.IdNoun).FirstOrDefault();
+            var status = "";
+            var del = context.Unit.Where(o => o.IdUnit == model.IdUnit).FirstOrDefault();
             if (del != null)
             {
                 context.Unit.Remove(del);
+                context.SaveChanges();
+                status = "Seccess";               
             }
-            context.SaveChanges();
-            return Json(del);
+            
+            else
+            {
+                status = "Fail";
+
+            }
+            
+            return Json(status);
         }
-        public IActionResult Delete_Product([FromBody] Productsparam model) //format return เช็ตเคสลบ **********
+        public IActionResult Delete_Product([FromBody] Productsparam model) //format return เช็ตเคสลบ ********** t
         {
+            var status = "";
             var del = context.Product.Where(o => o.IdProduct == model.IdProduct).FirstOrDefault();
             if (del != null)
             {
                 context.Product.Remove(del);
+                context.SaveChanges();
+                status = "Seccess";
             }
-            context.SaveChanges();
-            return Json(model);
+            else
+            {
+                status = "Fail";
+            }
+            return Json(status);
         }
     }
 }

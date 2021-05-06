@@ -3,8 +3,25 @@
 
 // Write your JavaScript code.
 
-function Edit_Unit(id) {
-    document.location = 'Edit_Unit_Page/?id=' + id;
+function Edit_Unit(id) {   
+    var obj = { IdUnit: id }
+    axios({
+        method: 'post',
+        url: '/Home/Check_Edit_Unit',
+        data: obj
+    })
+        .then(function (response) {
+            console.log(response.data.status );
+            if (response.data.status == "Seccess") {
+                document.location = 'Edit_Unit_Page/?id=' + response.data.edit.idUnit;
+            } else {
+                alert("ข้อมูลนี้ถูกลบไปแล้ว")
+                window.location.reload();
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 }
 function Edit_product(id) {
     document.location = 'Edit_Product_Page/?id=' + id;
@@ -59,17 +76,14 @@ function Save() {
 function Save_Product() {
     var ProductName = document.getElementById('add_product').value;
     var ProductPrice = document.getElementById('add_price').value;
-    var IdNoun = document.getElementById('add_unit').value;
-    console.log(ProductName)
-    console.log(ProductPrice)
-    console.log(IdNoun)
-    var idunit = parseInt(IdNoun)
+    var idUnit = document.getElementById('add_unit').value;
+    var idunit = parseInt(idUnit)
     var price = parseFloat(ProductPrice)
     if (name.trim() =="" && ProductPrice.trim() == "") {
         $('#validate_add_unit').text('กรอกข้อความ')
         $('#add_unit').css("border", "1px solid red");
     } else {
-        var obj = { ProductPrice: price, ProductName: ProductName, IdNoun: idunit }
+        var obj = { ProductPrice: price, ProductName: ProductName, IdUnit: idunit }
         console.log(obj)
         axios({
             method: 'post',
@@ -93,7 +107,7 @@ function Update(id) {
         $('#validate_edit_unit').text('กรอกข้อความ')
         $('#unitEdit').css("border", "1px solid red");
     } else {
-       var obj = { IdNoun: id, Name: name }
+        var obj = { IdUnit: id, Name: name }
         axios({
             method: 'post',
             url: '/Home/Update',
@@ -127,7 +141,7 @@ function Update_Product(id) {
         $('#validate_edit_price').text('กรอกข้อความ')
         $('#edit_price').css("border", "1px solid red");
     } else {
-        var obj = { IdProduct: idpro, ProductName: name_product, ProductPrice: price, IdNoun: unit }
+        var obj = { IdProduct: idpro, ProductName: name_product, ProductPrice: price, IdUnit: unit }
         axios({
             method: 'post',
             url: '/Home/Update_Product',
@@ -135,7 +149,7 @@ function Update_Product(id) {
         })
             .then(function (response) {
                 console.log(response);
-                window.location = '/Home/List_Product';
+              //  window.location = '/Home/List_Product';
             })
             .catch(function (error) {
                 console.log(error);
@@ -144,7 +158,7 @@ function Update_Product(id) {
 
 }
 function Delete_Unit(id) {
-    var obj = { IdNoun: id }
+    var obj = { IdUnit: id }
     axios({
         method: 'post',
         url: '/Home/Delete',
@@ -152,7 +166,13 @@ function Delete_Unit(id) {
     })
         .then(function (response) {
             console.log(response);
-            window.location.reload();
+            if (response.data == "Seccess") {
+                alert("ลบข้อมูลสำเร็จ")
+                window.location.reload();
+            } else {
+                alert("ข้อมูลนี้ถูกลบไปแล้ว")
+                window.location.reload();
+            }
         })
         .catch(function (error) {
             console.log(error);
@@ -169,7 +189,13 @@ function Delete_product(id) {
     })
         .then(function (response) {
             console.log(response);
-            window.location.reload();
+            if (response.data == "Seccess") {
+                alert("ลบข้อมูลสำเร็จ")
+                window.location.reload();
+            } else {
+                alert("ข้อมูลนี้ถูกลบไปแล้ว")
+                window.location.reload();
+            }
         })
         .catch(function (error) {
             console.log(error);

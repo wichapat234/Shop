@@ -92,7 +92,7 @@ namespace Shop.ViewModels
     }
     public class Unitparam
     {
-        public int IdNoun { get; set; }
+        public int IdUnit { get; set; }
         public string Name { get; set; }
     }
     public class Unitviewmodel
@@ -110,7 +110,7 @@ namespace Shop.ViewModels
         public int IdProduct { get; set; }
         public string ProductName { get; set; }
         public double ProductPrice { get; set; }
-        public int IdNoun { get; set; }
+        public int IdUnit { get; set; }
     }
 
 

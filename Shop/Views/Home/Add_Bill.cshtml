@@ -136,7 +136,7 @@
             var sum_int = parseFloat(sum_value);
             sum_cal += sum_int;
         }
-        document.getElementById("sum_after_discount").innerHTML = sum_cal.toFixed(2)
+        document.getElementById("sum_before_discount").innerHTML = sum_cal.toFixed(2)
     }
 
     function Calculate_Discount(count) {
@@ -149,14 +149,21 @@
             var dis_int = parseFloat(dis_value);
             dis_cal += dis_int;
         }
-        document.getElementById("total_discount").innerHTML = dis_cal
+        document.getElementById("total_discount").innerHTML = dis_cal.toFixed(2)
     }
 
-    function Calculate_Total() {
-        let dis_total = document.getElementById("total_discount").innerHTML //Calculate Total
-        let sum_af = document.getElementById("sum_after_discount").innerHTML
-        let sum_bf = sum_af - dis_total
-        document.getElementById("sum_before_discount").innerHTML = sum_bf.toFixed(2)
+    function Calculate_Total(count) {
+        var total_cal = 0;
+        for (var i = 1; i <= count; i++) { //Calculate Total
+            let total_value = document.getElementById("total" + i).innerHTML
+            if (total_value == "") {
+                total_value = 0;
+            }
+            var total_int = parseFloat(total_value);
+            total_cal += total_int;
+        } 
+        document.getElementById("sum_after_discount").innerHTML = total_cal.toFixed(2)
+
     }
 
     function addrow() {
@@ -192,7 +199,7 @@
 
                         Calculate_Sum(count);
                         Calculate_Discount(count);
-                        Calculate_Total();
+                        Calculate_Total(count);
                     }
 
                     var option1 = document.createElement("option");
@@ -234,20 +241,22 @@
                     var sum = document.createElement("h"); //สร้าง element แสดง ราคารวม
                     sum.id = "sum" + count;
                     sum.value = "";
-
                     var discount = document.createElement("input");//สร้าง element input ส่วนลด
                     discount.id = "discount" + count;
                     discount.value = "";
-                    discount.type = "number";
+                    discount.type = "number";                    
                     discount.onkeyup = function () { //ฟังก์ชัน OnKeyUp ส่วนลด
                         let sum_product = document.getElementById("sum" + cache).innerHTML
                         let discount_product = document.getElementById("discount" + cache).value
                         let total_product = 0;
                         total_product = sum_product - discount_product;
-                        document.getElementById("total" + cache).innerHTML = total_product
+                        if (total_product < 0) {
+                            total_product = 0;
+                        }
+                        document.getElementById("total" + cache).innerHTML = total_product.toFixed(2)
 
                         Calculate_Discount(count);
-                        Calculate_Total();
+                        Calculate_Total(count);
 
                     }
 
