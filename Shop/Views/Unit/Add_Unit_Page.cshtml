@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "เพิ่มหน่วยสินค้า";
+}
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<div class="text-center">
+    <br><br>
+
+    <label>ชื่อหน่วย : </label>
+    <input type="text" value="" id="add_unit">
+    <input type='button' value='บันทึก' id='myButton' onclick="Save()" /><br>
+    <span style="color:red;" id="validate_add_unit"></span>
+
+</div>
+<script>
+    function Save() {
+        let name = document.getElementById('add_unit').value;
+        namespace = name.trim();
+        console.log(name)
+        if (namespace.trim() == "") {
+            $('#validate_add_unit').text('กรอกข้อความ')
+            $('#add_unit').css("border", "1px solid red");
+            console.log("ไม่ผ่าน")
+        } else {         
+            console.log("ผ่าน")
+            const obj = { Name: name }
+            axios({
+                method: 'post',
+                url: '/Unit/Insert_Unit',
+                data: obj
+            })
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data == "seccess") {
+                        window.location = '/Unit/List_Unit';
+                    }
+                    else {
+                        alert("หน่วยสินค้าซ้ำ")
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+    }
+
+</script>
+
+
+
+
+

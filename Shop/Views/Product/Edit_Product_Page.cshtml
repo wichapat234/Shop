@@ -1,0 +1,110 @@
+﻿@using Shop.ViewModels
+@model EditProductViewmodel
+@{
+    ViewData["Title"] = "แก้ไขสินค้า";
+}
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<div>
+<br><br>
+    <table class="center">
+        <tr>
+            <td>ชื่อสินค้า :</td>
+            <td>
+                <input type="text" value="@Model.NameProduct" id="edit_product">
+                <span style="color:red;" id="validate_edit_nameproduct"></span>
+            </td>
+        </tr>
+        <tr>
+            <td><label>หน่วย : </label></td>
+
+            <td>
+                <select name="name_unit" id="edit_unit">
+
+                    @foreach (var data in Model.unit)
+                    {
+                        if (Model.IdUnit == data.IdUnit)
+                        {
+                            <option value="@data.IdUnit" selected> @data.NameUnit </option>
+
+                        }
+                        else
+                        {
+                            <option value="@data.IdUnit"> @data.NameUnit </option>
+                        }
+
+                        @*@(Model.IdNoun == data.IdNoun? "selected" : "" )*@
+                    }
+
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>ราคา : </label></td>
+
+            <td>
+                <input type="number" value="@Model.ProductPrice" id="edit_price">
+                <span style="color:red;" id="validate_edit_price"></span>
+            </td>
+
+        </tr>
+    </table>
+    <br>
+    <center>
+        <input type='button' value='บันทึก' id='myButton' onclick="Update_Product(@Model.Product_Id)" />
+    </center>
+    <br>
+
+</div>
+<script>
+    function Update_Product(id) {
+        let name_product = document.getElementById('edit_product').value;
+        let pricestr = document.getElementById('edit_price').value;
+        let unitstr = document.getElementById('edit_unit').value;
+        let idpro = parseInt(id)
+        let price = parseFloat(pricestr)
+        let unit = parseInt(unitstr)
+        if (name_product.trim() == "" && price.trim() == "") {
+            $('#validate_edit_nameproduct').text('กรอกข้อความ')
+            $('#edit_product').css("border", "1px solid red");
+            $('#validate_edit_price').text('กรอกข้อความ')
+            $('#edit_price').css("border", "1px solid red");
+        } else {
+            const obj = { IdProduct: idpro, ProductName: name_product, ProductPrice: price, IdUnit: unit }
+            axios({
+                method: 'post',
+                url: '/Product/Update_Product',
+                data: obj
+            })
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data == "seccess") {
+                        window.location = '/Home/List_Product';
+                    }
+                    else if (response.data == "fail") {
+                        alert("ข้อมูลสินค้าซ้ำ")
+                        //   window.location = '/Home/List_Product';
+                    } else if (response.data == "null") {
+                        alert("ข้อมูลนี้ถูกลบไปแล้ว")
+                        window.location = '/Home/List_Product';
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+    }
+    </script>
+<style>
+    table {
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+
+
+
+

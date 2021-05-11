@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Shop.ViewModels
+@model List<Productsparam>
+@{
     ViewData["Title"] = "รายการสินค้า";
 }
 <div class="text-center">
@@ -39,6 +41,52 @@
     </table>
 
 </div>
+<script>
+    function Edit_product(id) {
+        const obj = { IdProduct: id }
+        axios({
+            method: 'post',
+            url: '/Product/Check_Edit_Product',
+            data: obj
+        })
+            .then(function (response) {
+                console.log(response.data.status);
+                if (response.data.status == "Seccess") {
+                    document.location = 'Edit_Product_Page/?id=' + response.data.id;
+                } else {
+                    alert("ข้อมูลนี้ถูกลบไปแล้ว")
+                    window.location.reload();
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    function Delete_product(id) {
+        const obj = { IdProduct: id }
+        axios({
+            method: 'post',
+            url: '/Product/Delete_Product',
+            data: obj
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.data == "Seccess") {
+                    alert("ลบข้อมูลสำเร็จ")
+                    window.location.reload();
+                } else {
+                    alert("ข้อมูลนี้ถูกลบไปแล้ว")
+                    window.location.reload();
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+
+    }
+</script>
 <style>
     table {
         width: 50%;

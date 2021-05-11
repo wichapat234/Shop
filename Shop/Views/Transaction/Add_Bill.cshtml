@@ -1,7 +1,4 @@
-﻿@using Shop.ViewModels
-@model bill_idViewmodel
-
-@{
+﻿@{
     ViewData["Title"] = "เพิ่มบิล";
 }
 <body>
@@ -39,7 +36,7 @@
         <table class="ft">
             <tr>
                 <th>ราคารวมก่อนส่วนลด :</th>
-                <th id="sum_after_discount">0</th>
+                <th id="sum_before_discount">0</th>
                 <th>บาท</th>
             </tr>
             <tr>
@@ -49,7 +46,7 @@
             </tr>
             <tr>
                 <th>ราคารวมทั้งหมด :</th>
-                <th id="sum_before_discount">0</th>
+                <th id="sum_after_discount">0</th>
                 <th>บาท</th>
             </tr>
 
@@ -76,48 +73,48 @@
     }
 
     function save_bill() {
-        var table = document.getElementById("Mytable");
-        var totalRowCount = table.rows.length;
+        let table = document.getElementById("Mytable");
+        let totalRowCount = table.rows.length;
         const arry = [];
-        var sum_af_dis = document.getElementById("sum_after_discount").innerHTML
-        var sum_total_dis = document.getElementById("total_discount").innerHTML
-        var sum_bf_dis = document.getElementById("sum_before_discount").innerHTML
-        var dateTime = new Date();;
-        var sad = parseFloat(sum_af_dis)
-        var std = parseFloat(sum_total_dis)
-        var sbf = parseFloat(sum_bf_dis)
-        var obj = { PriceBefore: sbf, TotalDiscount: std, PriceAfter: sad, Date: dateTime }
+        let sum_af_dis = document.getElementById("sum_after_discount").innerHTML
+        let sum_total_dis = document.getElementById("total_discount").innerHTML
+        let sum_bf_dis = document.getElementById("sum_before_discount").innerHTML
+        let dateTime = new Date();;
+        let sad = parseFloat(sum_af_dis)
+        let std = parseFloat(sum_total_dis)
+        let sbf = parseFloat(sum_bf_dis)
+        const obj = { PriceBefore: sbf, TotalDiscount: std, PriceAfter: sad, Date: dateTime }
 
         for (var i = 1; i <= totalRowCount-1; i++) {
-            var sum_p = document.getElementById("sum" + i).innerHTML
-            var dis_p = document.getElementById("discount" + i).value
-            var total_p = document.getElementById("total" + i).innerHTML
-            var count_p = document.getElementById("count" + i).value
-            var value_p = document.getElementById("selectvalue" + i).value
-            var id_pro = parseInt(value_p)
-            var count_pro = parseInt(count_p)
-            var dis_pro = parseFloat(dis_p)
-            var sum_pro = parseFloat(sum_p)
-            var total_pro = parseFloat(total_p)
-            var idpro = { IdProduct: id_pro, Count: count_pro, Discount: dis_pro, TotalPrice: sum_pro, LastPrice: total_pro }
+            let sum_p = document.getElementById("sum" + i).innerHTML
+            let dis_p = document.getElementById("discount" + i).value
+            let total_p = document.getElementById("total" + i).innerHTML
+            let count_p = document.getElementById("count" + i).value
+            let value_p = document.getElementById("selectvalue" + i).value
+            let id_pro = parseInt(value_p)
+            let count_pro = parseInt(count_p)
+            let dis_pro = parseFloat(dis_p)
+            let sum_pro = parseFloat(sum_p)
+            let total_pro = parseFloat(total_p)
+            const idpro = { IdProduct: id_pro, Count: count_pro, Discount: dis_pro, TotalPrice: sum_pro, LastPrice: total_pro }
             arry.push(idpro)
         }
         console.log(arry)
 
-        var data = {
+        const data = {
             bill: obj,
-            detail: arry
+            detail1: arry
 
         }
 
         axios({
             method: 'post',
             dataType: 'json',
-            url: '/Home/insert_detail_bill ',
+            url: '/Transaction/insert_detail_bill ',
             data: data
         })
             .then(function (response) {
-
+                console.log(response.data)
                 document.location = 'Detail_Bill/?id=' + response.data;
             })
             .catch(function (error) {
@@ -127,39 +124,39 @@
     }
 
     function Calculate_Sum(count) {
-        var sum_cal = 0;
-        for (var i = 1; i <= count; i++) { //Calculate Sum
+        let sum_cal = 0;
+        for (let i = 1; i <= count; i++) { //Calculate Sum
             let sum_value = document.getElementById("sum" + i).innerHTML
             if (sum_value == "") {
                 sum_value = 0;
             }
-            var sum_int = parseFloat(sum_value);
+            let sum_int = parseFloat(sum_value);
             sum_cal += sum_int;
         }
         document.getElementById("sum_before_discount").innerHTML = sum_cal.toFixed(2)
     }
 
     function Calculate_Discount(count) {
-        var dis_cal = 0;
-        for (var i = 1; i <= count; i++) { //Calculate Discount
+        let dis_cal = 0;
+        for (let i = 1; i <= count; i++) { //Calculate Discount
             let dis_value = document.getElementById("discount" + i).value
             if (dis_value == "") {
                 dis_value = 0;
             }
-            var dis_int = parseFloat(dis_value);
+            let dis_int = parseFloat(dis_value);
             dis_cal += dis_int;
         }
         document.getElementById("total_discount").innerHTML = dis_cal.toFixed(2)
     }
 
     function Calculate_Total(count) {
-        var total_cal = 0;
-        for (var i = 1; i <= count; i++) { //Calculate Total
+        let total_cal = 0;
+        for (let i = 1; i <= count; i++) { //Calculate Total
             let total_value = document.getElementById("total" + i).innerHTML
             if (total_value == "") {
                 total_value = 0;
             }
-            var total_int = parseFloat(total_value);
+            let total_int = parseFloat(total_value);
             total_cal += total_int;
         } 
         document.getElementById("sum_after_discount").innerHTML = total_cal.toFixed(2)
@@ -169,27 +166,27 @@
     function addrow() {
         axios({
             method: 'Get',
-            url: '/Home/GatdataProduct',
+            url: '/Transaction/GatdataProduct',
         })
             .then(function (response) {
                 console.log(response.data)
-                var count = 0;
+                let count = 0;
                 document.getElementById("add_bill").onclick = function () {
                     count += 1;
-                    var Table = document.getElementById('Mytable');
-                    var TableRow = Table.insertRow(-1);
+                    const Table = document.getElementById('Mytable');
+                    const TableRow = Table.insertRow(-1);
 
                     //**Stat Create Select Option **//
-                    var selectList = document.createElement("select");
+                    const selectList = document.createElement("select");
                     selectList.id = "selectvalue" + count;
                     const cache = count;
                     selectList.onchange = function () { //ฟังก์ชัน OnChange สินค้า
                         //  let value_id = this.id;
-                        var value1 = document.getElementById("selectvalue" + cache).value
-                        for (let x = 0; x < response.data.product.length; x++) {
-                            if (value1 == response.data.product[x].product_Id) {
-                                document.getElementById("unit" + cache).innerHTML = response.data.product[x].nameUnit;
-                                document.getElementById("price" + cache).innerHTML = response.data.product[x].productPrice;
+                        let value1 = document.getElementById("selectvalue" + cache).value
+                        for (let x = 0; x < response.data.length; x++) {
+                            if (value1 == response.data[x].product_Id) {
+                                document.getElementById("unit" + cache).innerHTML = response.data[x].nameUnit;
+                                document.getElementById("price" + cache).innerHTML = response.data[x].productPrice;
                             }
                         }
                         document.getElementById("count" + cache).value = "";
@@ -202,19 +199,19 @@
                         Calculate_Total(count);
                     }
 
-                    var option1 = document.createElement("option");
+                    const option1 = document.createElement("option");
                     option1.id = "select" + count;
                     option1.text = "เลือกสินค้า";
                     selectList.appendChild(option1);
-                    for (var i = 0; i < response.data.product.length; i++) {
-                        var option = document.createElement("option");
-                        option.value = response.data.product[i].product_Id;
-                        option.text = response.data.product[i].nameProduct;
+                    for (var i = 0; i < response.data.length; i++) {
+                        const option = document.createElement("option");
+                        option.value = response.data[i].product_Id;
+                        option.text = response.data[i].nameProduct;
                         selectList.appendChild(option);
                     }
                     //**End Create Select Option **//
 
-                    var input_count = document.createElement("input"); //สร้าง element input จำนวนสินค้า
+                    const input_count = document.createElement("input"); //สร้าง element input จำนวนสินค้า
                     input_count.id = "count" + count;
                     input_count.type = "number";
                     input_count.value = "";
@@ -230,29 +227,32 @@
                         Calculate_Sum(count);
                     }
 
-                    var unit = document.createElement("h"); //สร้าง element แสดง หน่วยสินค้า
+                    const unit = document.createElement("h"); //สร้าง element แสดง หน่วยสินค้า
                     unit.id = "unit" + count;
                     unit.value = "";
 
-                    var price = document.createElement("h"); //สร้าง element แสดงราคา/ชิ้น
+                    const price = document.createElement("h"); //สร้าง element แสดงราคา/ชิ้น
                     price.id = "price" + count;
                     price.value = "";
 
-                    var sum = document.createElement("h"); //สร้าง element แสดง ราคารวม
+                    const sum = document.createElement("h"); //สร้าง element แสดง ราคารวม
                     sum.id = "sum" + count;
                     sum.value = "";
-                    var discount = document.createElement("input");//สร้าง element input ส่วนลด
+                    const discount = document.createElement("input");//สร้าง element input ส่วนลด
                     discount.id = "discount" + count;
                     discount.value = "";
-                    discount.type = "number";                    
+                    discount.type = "number";                
+                   
                     discount.onkeyup = function () { //ฟังก์ชัน OnKeyUp ส่วนลด
                         let sum_product = document.getElementById("sum" + cache).innerHTML
                         let discount_product = document.getElementById("discount" + cache).value
+                        sum_pro = parseFloat(sum_product);
+                        dis_pro = parseFloat(discount_product);
+                        if (dis_pro > sum_pro) {
+                            discount_product = document.getElementById("discount" + cache).value = sum_product
+                        }
                         let total_product = 0;
                         total_product = sum_product - discount_product;
-                        if (total_product < 0) {
-                            total_product = 0;
-                        }
                         document.getElementById("total" + cache).innerHTML = total_product.toFixed(2)
 
                         Calculate_Discount(count);
@@ -260,12 +260,12 @@
 
                     }
 
-                    var total = document.createElement("h"); //สร้าง element แสดง ราคาทั้งหมด
+                    const total = document.createElement("h"); //สร้าง element แสดง ราคาทั้งหมด
                     total.id = "total" + count;
                     total.value = "";
 
 
-                    var currentCell = TableRow.insertCell(-1);
+                    let currentCell = TableRow.insertCell(-1);
                     currentCell.appendChild(selectList);  //เลือกสินค้า
 
                     currentCell = TableRow.insertCell(-1);

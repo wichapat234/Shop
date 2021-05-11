@@ -1,0 +1,88 @@
+﻿@using Shop.ViewModels
+@model EditProductViewmodel
+
+@{
+    ViewData["Title"] = "เพิ่มสินค้า";
+}
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<div>
+    <br><br>
+    <table class="center">
+        <tr>
+            <td>ชื่อสินค้า :</td>
+            <td><input type="text" value="" id="add_product"></td>
+        </tr>
+        <tr>
+            <td><label>หน่วย : </label></td>
+
+            <td>
+                <select name="name_unit" id="add_unit">
+
+                    @{
+                        foreach (var data in Model.unit)
+                        {
+                            <option value="@data.IdUnit">@data.NameUnit</option>
+                        }
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>ราคา : </label></td>
+            <td><input type="number" value="" id="add_price"></td>
+        </tr>
+    </table>
+    <br>
+    <center>
+        <input type='button' value='บันทึก' id='myButton' onclick="Save_Product()" />
+    </center>
+    <br>
+
+</div>
+<script>
+    function Save_Product() {
+        let ProductName = document.getElementById('add_product').value;
+        let ProductPrice = document.getElementById('add_price').value;
+        let idUnit = document.getElementById('add_unit').value;
+        let idunit = parseInt(idUnit)
+        let price = parseFloat(ProductPrice)
+        if (name.trim() == "" && ProductPrice.trim() == "") {
+            $('#validate_add_unit').text('กรอกข้อความ')
+            $('#add_unit').css("border", "1px solid red");
+        } else {
+            const obj = { ProductPrice: price, ProductName: ProductName, IdUnit: idunit }
+            console.log(obj)
+            axios({
+                method: 'post',
+                url: '/Product/Insert_Product',
+                data: obj
+            })
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data == "seccess") {
+                        window.location = '/Home/List_Product';
+                    }
+                    else {
+                        alert("หน่วยสินค้าซ้ำ")
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+    }
+</script>
+<style>
+    table {
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+
+
+
+

@@ -1,0 +1,58 @@
+﻿@using Shop.ViewModels
+@model Unitviewmodel
+
+@{
+    ViewData["Title"] = "แก้ไขหน่วยสินค้า";
+}
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<div class="text-center">
+    <br><br>
+    <label>ชื่อหน่วย : </label>
+            <input type="text" id="unitEdit" value="@Model.unit1.NameUnit">
+            <input type='button' value='บันทึก' id='myButton' onclick='Update(@Model.unit1.IdUnit)' />
+
+
+</div>
+<script>
+   
+
+    function Update(id) {
+        let name = document.getElementById('unitEdit').value;
+        console.log(name)
+        if (name.trim() == "") {
+            $('#validate_edit_unit').text('กรอกข้อความ')
+            $('#unitEdit').css("border", "1px solid red");
+        } else {
+            const obj = { IdUnit: id, Name: name }
+            axios({
+                method: 'post',
+                url: '/Unit/Update_Unit',
+                data: obj
+            })
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data == "seccess") {
+                        window.location = '/Unit/List_Unit';
+                    }
+                    else if (response.data == "fail") {
+                        alert("ข้อมูลสินค้าซ้ำ")
+                        //   window.location = '/Home/List_Product';
+                    } else if (response.data == "null") {
+                        alert("ข้อมูลนี้ถูกลบไปแล้ว")
+                        window.location = '/Unit/List_Unit';
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+    }
+</script>
+
+
+
+
+

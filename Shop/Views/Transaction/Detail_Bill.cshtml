@@ -1,5 +1,5 @@
 ﻿@using Shop.ViewModels
-@model DetailbillViewmodel
+@model bill_detailparam
 
 @{
     ViewData["Title"] = "รายการบิล";
@@ -18,12 +18,12 @@
 
                 <th rowspan="2" colspan="3"> </th>
                 <th>เลขบิล </th>
-                <th>@Model.bill_total.NumberBill</th>
+                <th>@Model.bill.NumberBill</th>
             </tr>
             <tr>
 
                 <th>วันที่ </th>
-                <th>@Model.bill_total.Date.ToString("dd/MM/yyyy")</th>
+                <th>@Model.bill.Date.ToString("dd/MM/yyyy")</th>
             </tr>
             <tr>
                 <th colspan="5">&nbsp;</th>
@@ -40,14 +40,14 @@
         <tbody>
 
             @{
-                foreach (var data in Model.bill_detail)
+                foreach (var data in Model.detail)
                 {
                         <tr>
                             <td> @data.NameProduct</td>
                             <td> @data.Count / @data.NameUnit</td>
-                            <td> @data.ProductPrice</td>
-                            <td> @data.totalPrice</td>
-                            <td> @data.Discount.Value.ToString("0.00")</td>
+                            <td> @data.ProductPrice.ToString("0.00")</td>
+                            <td> @data.totalPrice.ToString("0.00")</td>
+                            <td> @data.Discount.ToString("0.00")</td>
 
                         </tr>
                 }
@@ -58,17 +58,17 @@
             <tr>
                 <th rowspan="3" colspan="3"> </th>
                 <th>ราคารววมก่อนส่วนลด </th>
-                <th>@Model.bill_total.PriceAfter</th>
+                <th>@Model.bill.PriceAfter.ToString("0.00")</th>
             </tr>
             <tr>
 
                 <th>ส่วนลดทั้งหมด </th>
-                <th>@Model.bill_total.TotalDiscount</th>
+                <th>@Model.bill.TotalDiscount.ToString("0.00")</th>
             </tr>
             <tr>
 
                 <th>ราคารวมทั้งหมด </th>
-                <th>@Model.bill_total.PriceBefore</th>
+                <th>@Model.bill.PriceBefore.ToString("0.00")</th>
             </tr>
 
         </tbody>

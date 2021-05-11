@@ -1,7 +1,4 @@
-﻿@using Shop.ViewModels
-@model billViewmodel
-
-@{
+﻿@{
     ViewData["Title"] = "รายการบิล";
 }
 
@@ -37,15 +34,14 @@
         show_and_search_bill();
     });
 
-
     function show_and_search_bill() {
-        var bill = document.getElementById('bill').value;
-        var date = document.getElementById('date').value;
+        let bill = document.getElementById('bill').value;
+        let date = document.getElementById('date').value;
         console.log(date)
-        var obj = { NumberBill: bill, date:date}
+        const obj = { NumberBill: bill, date: date }
         axios({
             method: 'post',
-            url: '/Home/Get_Listbill',
+            url: '/Transaction/Get_Listbill',
             data: obj,
         })
             .then(function (response) {
@@ -55,9 +51,9 @@
                     x += '<tr>';
                     x += '<td>' + element.dateformate + '</td>';
                     x += '<td>' + element.numberBill + '</td>';
-                    x += '<td>' + element.priceBefore + '</td>';
-                    x += '<td>' + element.totalDiscount + '</td>';
-                    x += '<td>' + element.priceAfter + '</td>';
+                    x += '<td>' + element.priceBefore.toFixed(2) + '</td>';
+                    x += '<td>' + element.totalDiscount.toFixed(2) + '</td>';
+                    x += '<td>' + element.priceAfter.toFixed(2) + '</td>';
                     x += '<td><input type="button" name="detail" onClick="Detail_Bill('+element.idBill+')" value="รายละเอียด"></td>';
                     x += '</tr>';
                 });
