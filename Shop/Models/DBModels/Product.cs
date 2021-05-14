@@ -12,7 +12,7 @@ namespace Shop.Models.DBModels
 
         public int IdProduct { get; set; }
         public string ProductName { get; set; }
-        public double ProductPrice { get; set; }
+        public decimal ProductPrice { get; set; }
         public int IdUnit { get; set; }
 
         public virtual Unit IdUnitNavigation { get; set; }

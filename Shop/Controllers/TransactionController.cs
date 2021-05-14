@@ -17,8 +17,6 @@ namespace Shop.Controllers
     {
         private readonly Repository_Transaction repository_transaction;
 
-        private string status;
-
         public TransactionController(Repository_Transaction repository_transaction)
         {
             this.repository_transaction = repository_transaction;
@@ -44,7 +42,7 @@ namespace Shop.Controllers
         }
         public IActionResult Detail_Bill(int id)
         {
-            bill_detailparam model = new bill_detailparam();
+            bill_detailViewmodel model = new bill_detailViewmodel();
             model.bill = repository_transaction.Get_Data_Bill(id);
             model.detail = repository_transaction.Get_Data_Detailbill(id);
             return View(model);

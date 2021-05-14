@@ -17,7 +17,6 @@ namespace Shop.Controllers
     {
 
         private readonly Repository_Unit repository_unit;
-        private string status;
 
         public UnitController(Repository_Unit repository_unit)
         {
@@ -38,6 +37,7 @@ namespace Shop.Controllers
         }
         public IActionResult Check_Edit_Unit([FromBody] Unitparam model1) // done
         {
+            string status;
             int id = model1.IdUnit;
             status = repository_unit.Check_Unit(id);
             var data = new { status, id };
@@ -45,6 +45,7 @@ namespace Shop.Controllers
         }
         public IActionResult Update_Unit([FromBody] Unitparam unit)  // done
         {
+            string status;
             status = repository_unit.Update_Unit(unit);
             return Json(status);
         }
@@ -60,12 +61,13 @@ namespace Shop.Controllers
         }
         public IActionResult Insert_Unit([FromBody] Unitparam unit) // done
         {
-
+            string status;
             status = repository_unit.Insert_Unit(unit);
             return Json(status);
         }
         public IActionResult Delete([FromBody] Unitparam unit) // done
         {
+            string status;
             status = repository_unit.Delete_Unit(unit);
             return Json(status);
         }

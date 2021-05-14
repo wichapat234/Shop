@@ -14,9 +14,7 @@ namespace Shop.Repositories1
     public class Repository_Transaction
     {
         private readonly _711_databaseContext context;
-        private string status;
-        private string format;
-        private int idbill;
+        private const string format = "yyyy-MM-dd";
         private DateTime datemodel;
 
         public Repository_Transaction(_711_databaseContext context)
@@ -28,10 +26,8 @@ namespace Shop.Repositories1
         {
             if (model.date != "")
             {
-                format = "yyyy-MM-dd";
-                CultureInfo provider = CultureInfo.InvariantCulture;
-                provider = new CultureInfo("en-US");
-                datemodel = DateTime.ParseExact(model.date, format, provider);
+               
+                datemodel = DateTime.ParseExact(model.date, format, CultureInfo.InvariantCulture);
             }
             IQueryable<addbillViewmodel> queryResult = from a in context.Bill
                                                        where (a.NumberBill.Contains(model.NumberBill) && model.date == "") ||
@@ -46,7 +42,6 @@ namespace Shop.Repositories1
                                                            PriceAfter = a.PriceAfter,
                                                            Dateformate = a.DateFormate,
                                                            NumberBill = a.NumberBill
-
                                                        };
             return queryResult.ToList();
         }
@@ -96,19 +91,25 @@ namespace Shop.Repositories1
         }
         public int Insert_Detail_Bill(bill_detailparam model1)
         {
+            int idbill = 0;
+         //   string datestr = model1.bill1.Date.ToString("yyyyMMddHHmmss");
+            datemodel = DateTime.ParseExact(model1.bill1.Date, format , CultureInfo.InvariantCulture);
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
                 {
+
                     var count = context.Bill.Count();
+                    int num = count+1;
                     var name = "Bill-";
-                    var NumberBill = name + count;
+                    var NumberBill = name + num;
                     var bill = new Bill()
+                    
                     {
-                        PriceBefore = model1.bill.PriceBefore,
-                        TotalDiscount = model1.bill.TotalDiscount,
-                        PriceAfter = model1.bill.PriceAfter,
-                        Date = model1.bill.Date,
+                        PriceBefore = model1.bill1.PriceBefore,
+                        TotalDiscount = model1.bill1.TotalDiscount,
+                        PriceAfter = model1.bill1.PriceAfter,
+                        Date = datemodel,
                         NumberBill = NumberBill,
                     };
                     context.Bill.Add(bill);

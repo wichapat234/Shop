@@ -11,11 +11,12 @@ namespace Shop.Models.DBModels
         }
 
         public int IdBill { get; set; }
-        public double PriceBefore { get; set; }
-        public double TotalDiscount { get; set; }
-        public double PriceAfter { get; set; }
+        public decimal PriceBefore { get; set; }
+        public decimal TotalDiscount { get; set; }
+        public decimal PriceAfter { get; set; }
         public DateTime Date { get; set; }
         public string NumberBill { get; set; }
+
         public string DateFormate => $"{Date.ToString("dd/MM/yyyy")}";
         public virtual ICollection<BillDetail> BillDetail { get; set; }
     }

@@ -51,11 +51,17 @@ namespace Shop.Models.DBModels
                     .HasCharSet("utf8")
                     .HasCollation("utf8_bin");
 
-                entity.Property(e => e.PriceAfter).HasColumnName("price_after");
+                entity.Property(e => e.PriceAfter)
+                    .HasColumnName("price_after")
+                    .HasColumnType("decimal(10,0)");
 
-                entity.Property(e => e.PriceBefore).HasColumnName("price_before");
+                entity.Property(e => e.PriceBefore)
+                    .HasColumnName("price_before")
+                    .HasColumnType("decimal(10,0)");
 
-                entity.Property(e => e.TotalDiscount).HasColumnName("total_discount");
+                entity.Property(e => e.TotalDiscount)
+                    .HasColumnName("total_discount")
+                    .HasColumnType("decimal(10,0)");
             });
 
             modelBuilder.Entity<BillDetail>(entity =>
@@ -75,15 +81,21 @@ namespace Shop.Models.DBModels
 
                 entity.Property(e => e.Count).HasColumnName("count");
 
-                entity.Property(e => e.Discount).HasColumnName("discount");
+                entity.Property(e => e.Discount)
+                    .HasColumnName("discount")
+                    .HasColumnType("decimal(10,0)");
 
                 entity.Property(e => e.IdBill).HasColumnName("id_bill");
 
                 entity.Property(e => e.IdProduct).HasColumnName("id_product");
 
-                entity.Property(e => e.LastPrice).HasColumnName("last_price");
+                entity.Property(e => e.LastPrice)
+                    .HasColumnName("last_price")
+                    .HasColumnType("decimal(10,0)");
 
-                entity.Property(e => e.TotalPrice).HasColumnName("total_price");
+                entity.Property(e => e.TotalPrice)
+                    .HasColumnName("total_price")
+                    .HasColumnType("decimal(10,0)");
 
                 entity.HasOne(d => d.IdBillNavigation)
                     .WithMany(p => p.BillDetail)
@@ -123,7 +135,9 @@ namespace Shop.Models.DBModels
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.Property(e => e.ProductPrice).HasColumnName("product_price");
+                entity.Property(e => e.ProductPrice)
+                    .HasColumnName("product_price")
+                    .HasColumnType("decimal(10,0)");
 
                 entity.HasOne(d => d.IdUnitNavigation)
                     .WithMany(p => p.Product)

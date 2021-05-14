@@ -35,9 +35,9 @@
     });
 
     function show_and_search_bill() {
-        let bill = document.getElementById('bill').value;
-        let date = document.getElementById('date').value;
-        console.log(date)
+        const bill = document.getElementById('bill').value;
+        const date = document.getElementById('date').value;
+    //    console.log(date)
         const obj = { NumberBill: bill, date: date }
         axios({
             method: 'post',
@@ -46,18 +46,24 @@
         })
             .then(function (response) {
                 console.log(response);
-                var x = "";
+                let table="";
                 response.data.forEach(function (element) {
-                    x += '<tr>';
-                    x += '<td>' + element.dateformate + '</td>';
-                    x += '<td>' + element.numberBill + '</td>';
-                    x += '<td>' + element.priceBefore.toFixed(2) + '</td>';
-                    x += '<td>' + element.totalDiscount.toFixed(2) + '</td>';
-                    x += '<td>' + element.priceAfter.toFixed(2) + '</td>';
-                    x += '<td><input type="button" name="detail" onClick="Detail_Bill('+element.idBill+')" value="รายละเอียด"></td>';
-                    x += '</tr>';
+                    const date = element.dateformate;
+                    const subYear = date.substr(date.lastIndexOf("/") + 1);
+                    const subDateMonth = date.substr(0, date.search(subYear))
+                    const convertInt = parseInt(subYear)
+                    const yearEn = convertInt - 543;
+                    const DateEn = subDateMonth + yearEn;
+                    table += '<tr>';
+                    table += '<td>' + DateEn + '</td>';
+                    table += '<td>' + element.numberBill + '</td>';
+                    table += '<td>' + element.priceBefore.toFixed(2) + '</td>';
+                    table += '<td>' + element.totalDiscount.toFixed(2) + '</td>';
+                    table += '<td>' + element.priceAfter.toFixed(2) + '</td>';
+                    table += '<td><input type="button" name="detail" onClick="Detail_Bill('+element.idBill+')" value="รายละเอียด"></td>';
+                    table += '</tr>';
                 });
-                document.getElementById("body1").innerHTML = x;
+                document.getElementById("body1").innerHTML = table;
             })
             .catch(function (error) {
                 console.log(error);

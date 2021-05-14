@@ -357,7 +357,6 @@ D:\Shop\Shop\obj\Debug\netcoreapp3.1\Shop.csproj.CopyComplete
 D:\Shop\Shop\obj\Debug\netcoreapp3.1\Shop.dll
 D:\Shop\Shop\obj\Debug\netcoreapp3.1\Shop.pdb
 D:\Shop\Shop\obj\Debug\netcoreapp3.1\Shop.genruntimeconfig.cache
-D:\Shop\Shop\obj\Debug\netcoreapp3.1\Shop.csprojAssemblyReference.cache
 D:\Shop\Shop\obj\Debug\netcoreapp3.1\Razor\Views\Unit\Add_Unit_Page.cshtml.g.cs
 D:\Shop\Shop\obj\Debug\netcoreapp3.1\Razor\Views\Unit\Edit_Unit_Page.cshtml.g.cs
 D:\Shop\Shop\obj\Debug\netcoreapp3.1\Razor\Views\Unit\List_Unit.cshtml.g.cs
@@ -367,3 +366,4 @@ D:\Shop\Shop\obj\Debug\netcoreapp3.1\Razor\Views\Product\List_Product.cshtml.g.c
 D:\Shop\Shop\obj\Debug\netcoreapp3.1\Razor\Views\Transaction\Add_Bill.cshtml.g.cs
 D:\Shop\Shop\obj\Debug\netcoreapp3.1\Razor\Views\Transaction\Detail_Bill.cshtml.g.cs
 D:\Shop\Shop\obj\Debug\netcoreapp3.1\Razor\Views\Transaction\List_Bill.cshtml.g.cs
+D:\Shop\Shop\obj\Debug\netcoreapp3.1\Shop.csprojAssemblyReference.cache

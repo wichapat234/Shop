@@ -8,37 +8,38 @@ namespace Shop.ViewModels
 {
     public class bill_totalViewmodel
     {
-        public double PriceBefore { get; set; }
-        public double TotalDiscount { get; set; }
-        public double PriceAfter { get; set; }
+        public decimal PriceBefore { get; set; }
+        public decimal TotalDiscount { get; set; }
+        public decimal PriceAfter { get; set; }
         public string NumberBill { get; set; }
         public DateTime Date { get; set; }
-
     }
+
     public class addbillViewmodel
     {
         public int IdBill { get; set; }
-        public double PriceBefore { get; set; }
-        public double TotalDiscount { get; set; }
-        public double PriceAfter { get; set; }
+        public decimal PriceBefore { get; set; }
+        public decimal TotalDiscount { get; set; }
+        public decimal PriceAfter { get; set; }
         public string Dateformate { get; set; }
         public string NumberBill { get; set; }
+        public string Date { get; set; }
     }
     public class addbilldetailViewmodel
     {
         public int IdProduct { get; set; }
         public int Count { get; set; }
-        public double Discount { get; set; }
-        public double TotalPrice { get; set; }
-        public double LastPrice { get; set; }
+        public decimal Discount { get; set; }
+        public decimal TotalPrice { get; set; }
+        public decimal LastPrice { get; set; }
     }
     public class BillproductViewmodel
     {
-        public double Discount { get; set; }
+        public decimal Discount { get; set; }
         public string NameProduct { get; set; }
         public string NameUnit { get; set; }
-        public double ProductPrice { get; set; }
-        public double totalPrice { get; set; }
+        public decimal ProductPrice { get; set; }
+        public decimal totalPrice { get; set; }
         public int Count { get; set; }
     }
 
@@ -49,12 +50,19 @@ namespace Shop.ViewModels
     }
 
 
+    public class bill_detailViewmodel
+    {
+        public List<BillproductViewmodel> detail { get; set; }
+        public bill_totalViewmodel bill { get; set; }
+        
+    }
     public class bill_detailparam
     {
         public List<addbilldetailViewmodel> detail1 { get; set; }
-        public List<BillproductViewmodel> detail { get; set; }
-        public bill_totalViewmodel bill { get; set; }
+        public addbillViewmodel bill1 { get; set; }
+
     }
+
 
     public class DetailbillViewmodel
     {
@@ -68,7 +76,7 @@ namespace Shop.ViewModels
         public string NameUnit { get; set; }
         public string NameProduct { get; set; }
         public int Product_Id { get; set; }
-        public double ProductPrice { get; set; }
+        public decimal ProductPrice { get; set; }
         public List<Unit> unit { get; set; }
     }
     public class Unitparam
@@ -87,7 +95,7 @@ namespace Shop.ViewModels
     {
         public int IdProduct { get; set; }
         public string ProductName { get; set; }
-        public double ProductPrice { get; set; }
+        public decimal ProductPrice { get; set; }
         public int IdUnit { get; set; }
         public string NameUnit { get; set; }
         public string NameProduct { get; set; }

@@ -13,7 +13,6 @@ namespace Shop.Repositories1
     public class Repository_Product
     {
         private readonly _711_databaseContext context;
-        private string status = "";
 
         public Repository_Product(_711_databaseContext context)
         {
@@ -36,6 +35,7 @@ namespace Shop.Repositories1
 
         public string Check_Product(int id)
         {
+            string status;
             var edit = context.Product.Where(o => o.IdProduct == id).SingleOrDefault();
             if (edit != null)
             {
@@ -67,6 +67,7 @@ namespace Shop.Repositories1
         }
         public string Insert_Product(Productsparam product)
         {
+            string status;
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
@@ -104,7 +105,7 @@ namespace Shop.Repositories1
         }
         public string Delete_Product(Productsparam product)
         {
-
+            string status;
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
@@ -134,7 +135,7 @@ namespace Shop.Repositories1
 
         public string Update_Product(Productsparam product)
         {
-
+            string status;
             using (var transaction = context.Database.BeginTransaction())
             {
                 try

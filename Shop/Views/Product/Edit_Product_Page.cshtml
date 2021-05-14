@@ -59,12 +59,12 @@
 </div>
 <script>
     function Update_Product(id) {
-        let name_product = document.getElementById('edit_product').value;
-        let pricestr = document.getElementById('edit_price').value;
-        let unitstr = document.getElementById('edit_unit').value;
-        let idpro = parseInt(id)
-        let price = parseFloat(pricestr)
-        let unit = parseInt(unitstr)
+        const name_product = document.getElementById('edit_product').value;
+        const pricestr = document.getElementById('edit_price').value;
+        const unitstr = document.getElementById('edit_unit').value;
+        const idpro = parseInt(id)
+        const price = parseFloat(pricestr)
+        const unit = parseInt(unitstr)
         if (name_product.trim() == "" && price.trim() == "") {
             $('#validate_edit_nameproduct').text('กรอกข้อความ')
             $('#edit_product').css("border", "1px solid red");

@@ -18,7 +18,7 @@ namespace Shop.Controllers
 
         private readonly Repository_Product repository_product; 
         private readonly Repository_Unit repository_unit;
-        private string status;
+        
 
         public ProductController(Repository_Product repository_product, Repository_Unit repository_unit)
         {
@@ -32,6 +32,7 @@ namespace Shop.Controllers
         }
        public IActionResult Check_Edit_Product([FromBody] Productsparam model) // done
         {
+            string status;
             int id = model.IdProduct;
             status = repository_product.Check_Product(id);
             var data = new { status, id };
@@ -39,16 +40,19 @@ namespace Shop.Controllers
         }
         public IActionResult Update_Product([FromBody] Productsparam model) // done
         {
+            string status;
             status = repository_product.Update_Product(model);
             return Json(status);
         }
         public IActionResult Insert_Product([FromBody] Productsparam model) // done
         {
+            string status;
             status = repository_product.Insert_Product(model);
             return Json(status);
         }
         public IActionResult Delete_Product([FromBody] Productsparam model) // done
         {
+            string status;
             status = repository_product.Delete_Product(model);
             return Json(status);
         }

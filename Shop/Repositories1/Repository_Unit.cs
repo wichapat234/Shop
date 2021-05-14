@@ -13,8 +13,6 @@ namespace Shop.Repositories1
     public class Repository_Unit
     {
         private readonly _711_databaseContext context;
-        private string status = "";
-
         public Repository_Unit(_711_databaseContext context)
         {
             this.context = context;
@@ -29,6 +27,7 @@ namespace Shop.Repositories1
 
         public string Check_Unit(int id)
         {
+            string status;
             var edit = context.Unit.Where(o => o.IdUnit == id).SingleOrDefault();
             if (edit != null)
             {
@@ -51,6 +50,7 @@ namespace Shop.Repositories1
         }
         public string Insert_Unit(Unitparam unit)
         {
+            string status;
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
@@ -86,6 +86,7 @@ namespace Shop.Repositories1
         }
         public string Delete_Unit(Unitparam unit)
         {
+            string status;
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
@@ -120,7 +121,7 @@ namespace Shop.Repositories1
 
         public string Update_Unit(Unitparam unit)
         {
-
+            string status;
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
