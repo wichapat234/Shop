@@ -120,6 +120,7 @@
                 const countnameid = document.getElementsByClassName("countclass")[i].id;
                 document.getElementById(countnameid).classList.remove("validate");
             }
+
             if (dis[i].value == "") {
                 const disnameid = document.getElementsByClassName("disclass")[i].id;
                 document.getElementById(disnameid).classList.add("validate");
@@ -129,6 +130,7 @@
                 const disnameid = document.getElementsByClassName("disclass")[i].id;
                 document.getElementById(disnameid).classList.remove("validate");
             }
+
             if (select[i].value == "") {
                 const selectnameid = document.getElementsByClassName("selectclass")[i].id;
                 document.getElementById(selectnameid).classList.add("validate");
@@ -187,7 +189,7 @@
     }
 
     function Calculate_Discount() {
-        const dis_cal = 0;
+        let dis_cal = 0;
         let disint;
         const dis = document.getElementsByClassName("disclass");
         for (let i = 0; i < dis.length; i++) {
@@ -204,7 +206,7 @@
 
     function Calculate_Total() {
 
-        const total_cal = 0;
+        let total_cal = 0;
         let totalint;
         const total = document.getElementsByClassName("totalcalss");
         for (let i = 0; i < total.length; i++) {

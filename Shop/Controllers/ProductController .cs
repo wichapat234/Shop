@@ -28,7 +28,7 @@ namespace Shop.Controllers
         public IActionResult List_Product() // done
         {
             List<Productsparam> model = repository_product.Get_Product();
-            return View(model);
+            return Json(model);
         }
        public IActionResult Check_Edit_Product([FromBody] Productsparam model) // done
         {
@@ -60,13 +60,13 @@ namespace Shop.Controllers
         {
             EditProductViewmodel model = repository_product.Get_Edit_Product(id);
             model.unit = repository_unit.Get_Unit();
-            return View(model);
+            return Json(model);
         }
         public IActionResult Add_Product_Page() //done
         {
             EditProductViewmodel model = new EditProductViewmodel();
             model.unit = repository_unit.Get_Unit();
-            return View(model);
+            return Json(model);
         }
     }
 }

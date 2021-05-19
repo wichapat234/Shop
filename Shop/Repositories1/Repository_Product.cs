@@ -23,6 +23,7 @@ namespace Shop.Repositories1
         {
             IQueryable<Productsparam> queryResult = from a in context.Product
                                                     join b in context.Unit on a.IdUnit equals b.IdUnit
+                                                    orderby a.IdProduct
                                                     select new Productsparam
                                                     {
                                                         Product_Id = a.IdProduct,

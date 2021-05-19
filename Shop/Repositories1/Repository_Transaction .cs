@@ -93,7 +93,7 @@ namespace Shop.Repositories1
         {
             int idbill = 0;
          //   string datestr = model1.bill1.Date.ToString("yyyyMMddHHmmss");
-            datemodel = DateTime.ParseExact(model1.bill1.Date, format , CultureInfo.InvariantCulture);
+            datemodel = DateTime.ParseExact(model1.bill.Date, format , CultureInfo.InvariantCulture);
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
@@ -106,9 +106,9 @@ namespace Shop.Repositories1
                     var bill = new Bill()
                     
                     {
-                        PriceBefore = model1.bill1.PriceBefore,
-                        TotalDiscount = model1.bill1.TotalDiscount,
-                        PriceAfter = model1.bill1.PriceAfter,
+                        PriceBefore = model1.bill.PriceBefore,
+                        TotalDiscount = model1.bill.TotalDiscount,
+                        PriceAfter = model1.bill.PriceAfter,
                         Date = datemodel,
                         NumberBill = NumberBill,
                     };
@@ -117,7 +117,7 @@ namespace Shop.Repositories1
 
                     idbill = bill.IdBill;
 
-                    foreach (var data in model1.detail1.ToList())
+                    foreach (var data in model1.detail.ToList())
                     {
                         var billdetails = new BillDetail()
                         {

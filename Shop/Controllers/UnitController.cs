@@ -26,14 +26,14 @@ namespace Shop.Controllers
         {
             Unitviewmodel model = new Unitviewmodel();
             model.unit = repository_unit.Get_Unit();
-            return View(model);
+            return Json(model);
         }
       
         public IActionResult Edit_Unit_Page(int id) // done
         {
             Unitviewmodel model = new Unitviewmodel();
             model.unit1 = repository_unit.Get_Edit_Unit(id);
-            return View(model);
+            return Json(model);
         }
         public IActionResult Check_Edit_Unit([FromBody] Unitparam model1) // done
         {

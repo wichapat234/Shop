@@ -58,8 +58,8 @@ namespace Shop.ViewModels
     }
     public class bill_detailparam
     {
-        public List<addbilldetailViewmodel> detail1 { get; set; }
-        public addbillViewmodel bill1 { get; set; }
+        public List<addbilldetailViewmodel> detail { get; set; }
+        public addbillViewmodel bill { get; set; }
 
     }
 
