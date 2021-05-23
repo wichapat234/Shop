@@ -40,11 +40,11 @@ namespace Shop.Repositories1
             var edit = context.Product.Where(o => o.IdProduct == id).SingleOrDefault();
             if (edit != null)
             {
-                status = "Seccess";
+                status = "Success";
             }
             else
             {
-                status = "Fail";
+                status = "Null";
             }
             var data = new { edit, status };
 
@@ -88,18 +88,18 @@ namespace Shop.Repositories1
                         };
                         context.Product.Add(product1);
                         context.SaveChanges();
-                        status = "seccess";
+                        status = "Success";
                     }
                     else
                     {
-                        status = "fail";
+                        status = "Duplicate";
                     }
                     transaction.Commit();
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    status = "Eror";
+                    status = "Error";
                 }
             }
             return status;
@@ -116,18 +116,18 @@ namespace Shop.Repositories1
                     {
                         context.Product.Remove(del);
                         context.SaveChanges();
-                        status = "Seccess";
+                        status = "Success";
                     }
                     else
                     {
-                        status = "Fail";
+                        status = "Null";
                     }
                     transaction.Commit();
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    status = "Eror";
+                    status = "Error";
                 }
             }
 
@@ -153,24 +153,24 @@ namespace Shop.Repositories1
                             result.ProductPrice = product.ProductPrice;
                             result.IdUnit = product.IdUnit;
                             context.SaveChanges();
-                            status = "seccess";
+                            status = "Success";
 
                         }
                         else
                         {
-                            status = "null";
+                            status = "Null";
                         }
                     }
                     else
                     {
-                        status = "fail";
+                        status = "Duplicate";
                     }
                     transaction.Commit();
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    status = "Eror";
+                    status = "Error";
                 }
 
             }

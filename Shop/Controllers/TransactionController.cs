@@ -37,15 +37,25 @@ namespace Shop.Controllers
         }
         public IActionResult insert_detail_bill([FromBody] bill_detailparam model1)
         {
+            string status;
             int idbill = repository_transaction.Insert_Detail_Bill(model1);
-            return Json(idbill);
+            if(idbill == 0)
+            {
+                status = "Error";
+            }
+            else
+            {
+                status = "Success";
+            }
+            var objData = new { idbill, status };
+            return Json(objData);
         }
         public IActionResult Detail_Bill(int id)
         {
             bill_detailViewmodel model = new bill_detailViewmodel();
             model.bill = repository_transaction.Get_Data_Bill(id);
             model.detail = repository_transaction.Get_Data_Detailbill(id);
-            return View(model);
+            return Json(model);
         }
         public IActionResult GatdataProduct()
         {

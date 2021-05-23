@@ -92,7 +92,8 @@ namespace Shop.Repositories1
         public int Insert_Detail_Bill(bill_detailparam model1)
         {
             int idbill = 0;
-         //   string datestr = model1.bill1.Date.ToString("yyyyMMddHHmmss");
+            string status;
+            //   string datestr = model1.bill1.Date.ToString("yyyyMMddHHmmss");
             datemodel = DateTime.ParseExact(model1.bill.Date, format , CultureInfo.InvariantCulture);
             using (var transaction = context.Database.BeginTransaction())
             {
@@ -132,6 +133,7 @@ namespace Shop.Repositories1
                         };
                         context.BillDetail.Add(billdetails);
                         context.SaveChanges();
+                        status = "Success";
 
                     }
                     transaction.Commit();
@@ -139,8 +141,10 @@ namespace Shop.Repositories1
                 catch (Exception )
                 {
                     transaction.Rollback();
+                    status = "Error";
                 }
             }
+          //  var dataObj = new { idbill, status };
             return idbill;
         }
 

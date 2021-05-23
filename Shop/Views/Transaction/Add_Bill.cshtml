@@ -91,7 +91,7 @@
         } else {
             document.getElementById("date").classList.remove("validate");
         }
-
+        //console.log(dateTime);
         const sad = parseFloat(sum_af_dis)
         const std = parseFloat(sum_total_dis)
         const sbf = parseFloat(sum_bf_dis)
@@ -99,7 +99,7 @@
 
 
         const sum = document.getElementsByClassName("sumclass");
-        const dis = document.getElementsByClassName("disclass");
+        const dis = document.getElementsByClassName("disclass");    
         const total = document.getElementsByClassName("totalcalss");
         const count = document.getElementsByClassName("countclass");
         const select = document.getElementsByClassName("selectclass");
@@ -149,16 +149,16 @@
             const idpro = { IdProduct: id_pro, Count: count_pro, Discount: dis_pro, TotalPrice: sum_pro, LastPrice: total_pro }
             arry.push(idpro)
         }
-        console.log(arry)
+        
         if (valid == 0) {
             // alert("valid")
         } else {
             const data = {
-                bill1: obj,
-                detail1: arry
+                bill: obj,
+                detail: arry
 
             }
-
+            console.log(data)
             axios({
                 method: 'post',
                 dataType: 'json',
