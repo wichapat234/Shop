@@ -7,7 +7,8 @@
 </div>
 
 <div class="text-center">
-    <label>วันที่ :</label>&nbsp;<input type="date" id="date">&nbsp;
+    <label>วันที่เริ่มต้น :</label>&nbsp;<input type="date" id="startdate">&nbsp;
+    <label>วันที่สิ้นสุด :</label>&nbsp;<input type="date" id="enddate">&nbsp;
     <label>หมายเลขบิล :</label>&nbsp;<input type="text" id="bill">&nbsp;
     <input type='button' value='ค้นหา' id='myButton' onClick='show_and_search_bill()' />&nbsp;
     <input type='button' value='เพิ่มบิล' id='myButton' onClick='Add_Bill()' />
@@ -25,7 +26,6 @@
             </tr>
         </thead>
         <tbody id="body1">
-
         </tbody>
     </table>
 </div>
@@ -36,9 +36,10 @@
 
     function show_and_search_bill() {
         const bill = document.getElementById('bill').value;
-        const date = document.getElementById('date').value;
+        const startdate = document.getElementById('startdate').value;
+        const enddate = document.getElementById('enddate').value;
     //    console.log(date)
-        const obj = { NumberBill: bill, date: date }
+        const obj = { NumberBill: bill, startdate: startdate, enddate: enddate}
         axios({
             method: 'post',
             url: '/Transaction/Get_Listbill',
@@ -48,14 +49,14 @@
                 console.log(response);
                 let table="";
                 response.data.forEach(function (element) {
-                    const date = element.dateformate;
+  @*                  const date = element.dateformate;
                     const subYear = date.substr(date.lastIndexOf("/") + 1);
                     const subDateMonth = date.substr(0, date.search(subYear))
                     const convertInt = parseInt(subYear)
                     const yearEn = convertInt - 543;
-                    const DateEn = subDateMonth + yearEn;
+                    const DateEn = subDateMonth + yearEn;*@
                     table += '<tr>';
-                    table += '<td>' + DateEn + '</td>';
+                    table += '<td>' + element.dateformate + '</td>';
                     table += '<td>' + element.numberBill + '</td>';
                     table += '<td>' + element.priceBefore.toFixed(2) + '</td>';
                     table += '<td>' + element.totalDiscount.toFixed(2) + '</td>';

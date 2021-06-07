@@ -6,10 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Shop.Constan;
 using Shop.Models;
 using Shop.Models.DBModels;
 using Shop.Repositories1;
-using Shop.ViewModels;
+using Shop.TransactionViewModels;
 
 namespace Shop.Controllers
 {
@@ -26,40 +27,41 @@ namespace Shop.Controllers
         {
             return View();
         }
-        public IActionResult Get_Listbill([FromBody] searchViewmodel model) // done
+        [HttpPost]
+        public IActionResult Get_Listbill([FromBody] searchParam model) // done
         {
-            List<addbillViewmodel> model1 = repository_transaction.Get_Bill(model);
+            List<billViewModel> model1 = repository_transaction.Get_Bill(model);
+
             return Json(model1);
         }
         public IActionResult Add_Bill() // done
         {
             return View();
         }
-        public IActionResult insert_detail_bill([FromBody] bill_detailparam model1)
+
+        [HttpPost]
+        public IActionResult Insert_detail_bill([FromBody] addBillAndBilldetailParam model1)
         {
             string status;
             int idbill = repository_transaction.Insert_Detail_Bill(model1);
             if(idbill == 0)
             {
-                status = "Error";
+                status = constant.ERROR;
             }
             else
             {
-                status = "Success";
+                status = constant.SUCCEES;
             }
             var objData = new { idbill, status };
             return Json(objData);
         }
-        public IActionResult Detail_Bill(int id)
+
+        [HttpGet]
+        public IActionResult Detail_Bill([FromQuery] billdetailParam modelParam)
         {
-            bill_detailViewmodel model = new bill_detailViewmodel();
-            model.bill = repository_transaction.Get_Data_Bill(id);
-            model.detail = repository_transaction.Get_Data_Detailbill(id);
-            return Json(model);
-        }
-        public IActionResult GatdataProduct()
-        {
-            List<EditProductViewmodel> model = repository_transaction.Get_Data_Product();
+            getBillAndBilldetailViewModel model = new getBillAndBilldetailViewModel();
+            model.bill = repository_transaction.Get_Data_Bill(modelParam);
+            model.detail = repository_transaction.Get_Data_Detailbill(modelParam);
             return Json(model);
         }
     }

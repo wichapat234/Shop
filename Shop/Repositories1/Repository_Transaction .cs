@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Shop.Models;
 using Shop.Models.DBModels;
-using Shop.ViewModels;
+using Shop.TransactionViewModels;
+using Shop.ProductViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,60 +16,66 @@ namespace Shop.Repositories1
     {
         private readonly _711_databaseContext context;
         private const string format = "yyyy-MM-dd";
-        private DateTime datemodel;
+        private DateTime startdate;
+        private DateTime enddate;
 
         public Repository_Transaction(_711_databaseContext context)
         {
             this.context = context;
         }
 
-        public List<addbillViewmodel> Get_Bill(searchViewmodel model)
+        public List<billViewModel> Get_Bill(searchParam model)
         {
-            if (model.date != "")
+            if (model.startdate != "")
             {
-               
-                datemodel = DateTime.ParseExact(model.date, format, CultureInfo.InvariantCulture);
-            }
-            IQueryable<addbillViewmodel> queryResult = from a in context.Bill
-                                                       where (a.NumberBill.Contains(model.NumberBill) && model.date == "") ||
-                                                              (model.NumberBill != "" && model.date != "" && a.Date == datemodel && a.NumberBill.Contains(model.NumberBill)) ||
-                                                              (model.date != "" && model.NumberBill == "" && a.Date == datemodel)
 
-                                                       select new addbillViewmodel
+                startdate = DateTime.ParseExact(model.startdate, format, CultureInfo.InvariantCulture);
+            }
+            if(model.enddate != "")
+            {
+                enddate = DateTime.ParseExact(model.enddate, format, CultureInfo.InvariantCulture);
+            }
+            IQueryable<billViewModel> queryResult = from a in context.Bill
+                                                       where 
+                                                       (model.startdate == "" || startdate <= a.Date) && (model.enddate == "" || enddate >= a.Date) &&
+                                                       (model.NumberBill == "" || a.NumberBill.Contains(model.NumberBill))
+
+                                                       select new billViewModel
                                                        {
                                                            IdBill = a.IdBill,
                                                            PriceBefore = a.PriceBefore,
                                                            TotalDiscount = a.TotalDiscount,
                                                            PriceAfter = a.PriceAfter,
-                                                           Dateformate = a.DateFormate,
+                                                           DateTime = a.Date,
                                                            NumberBill = a.NumberBill
                                                        };
             return queryResult.ToList();
         }
-        public List<BillproductViewmodel> Get_Data_Detailbill(int id)
+        public List<billdetailViewModel> Get_Data_Detailbill(billdetailParam modelParam)
         {
-            IQueryable<BillproductViewmodel> detailbill = from b in context.BillDetail
-                                                          where b.IdBill == id
-                                                          join p in context.Product on b.IdProduct equals p.IdProduct
+            IQueryable<billdetailViewModel> detailbill = from b in context.BillDetail
+                                                          where b.IdBill == modelParam.IdBill
+                                                         join p in context.Product on b.IdProduct equals p.IdProduct
                                                           join u in context.Unit on p.IdUnit equals u.IdUnit
-                                                          select new BillproductViewmodel
+                                                          select new billdetailViewModel
                                                           {
                                                               NameUnit = u.NameUnit,
                                                               NameProduct = p.ProductName,
                                                               ProductPrice = p.ProductPrice,
                                                               Count = b.Count,
                                                               Discount = b.Discount,
-                                                              totalPrice = b.TotalPrice
+                                                              totalPrice = b.TotalPrice,
+                                                              lastPrice = b.LastPrice
                                                           };
             return detailbill.ToList();
         }
-        public bill_totalViewmodel Get_Data_Bill(int id)
+        public billViewModel Get_Data_Bill(billdetailParam modelParam)
         {
-            IQueryable<bill_totalViewmodel> bill = from a in context.Bill
-                                                     where a.IdBill == id
-                                                     select new bill_totalViewmodel
+            IQueryable<billViewModel> bill = from a in context.Bill
+                                                     where a.IdBill == modelParam.IdBill
+                                             select new billViewModel
                                                      {
-                                                         Date = a.Date,
+                                                         DateTime = a.Date,
                                                          NumberBill = a.NumberBill,
                                                          PriceBefore = a.PriceBefore,
                                                          PriceAfter = a.PriceAfter,
@@ -76,25 +83,11 @@ namespace Shop.Repositories1
                                                      };
             return bill.SingleOrDefault();
         }
-        public List<EditProductViewmodel> Get_Data_Product()
-        {
-            IQueryable<EditProductViewmodel> dataProduct = from a in context.Product
-                                                           join b in context.Unit on a.IdUnit equals b.IdUnit
-                                                           select new EditProductViewmodel
-                                                           {
-                                                               Product_Id = a.IdProduct,
-                                                               NameUnit = b.NameUnit,
-                                                               NameProduct = a.ProductName,
-                                                               ProductPrice = a.ProductPrice
-                                                           };
-            return dataProduct.ToList();
-        }
-        public int Insert_Detail_Bill(bill_detailparam model1)
+        public int Insert_Detail_Bill(addBillAndBilldetailParam model1)
         {
             int idbill = 0;
             string status;
-            //   string datestr = model1.bill1.Date.ToString("yyyyMMddHHmmss");
-            datemodel = DateTime.ParseExact(model1.bill.Date, format , CultureInfo.InvariantCulture);
+            startdate = DateTime.ParseExact(model1.bill.Date, format , CultureInfo.InvariantCulture);
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
@@ -110,7 +103,7 @@ namespace Shop.Repositories1
                         PriceBefore = model1.bill.PriceBefore,
                         TotalDiscount = model1.bill.TotalDiscount,
                         PriceAfter = model1.bill.PriceAfter,
-                        Date = datemodel,
+                        Date = startdate,
                         NumberBill = NumberBill,
                     };
                     context.Bill.Add(bill);
@@ -133,7 +126,6 @@ namespace Shop.Repositories1
                         };
                         context.BillDetail.Add(billdetails);
                         context.SaveChanges();
-                        status = "Success";
 
                     }
                     transaction.Commit();
@@ -141,10 +133,8 @@ namespace Shop.Repositories1
                 catch (Exception )
                 {
                     transaction.Rollback();
-                    status = "Error";
                 }
             }
-          //  var dataObj = new { idbill, status };
             return idbill;
         }
 

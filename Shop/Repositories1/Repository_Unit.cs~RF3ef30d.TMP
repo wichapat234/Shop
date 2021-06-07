@@ -30,10 +30,10 @@ namespace Shop.Repositories1
             return queryResult.ToList();
         }
 
-        public string Check_Unit(UnitParam model)
+        public string Check_Unit(int id)
         {
             string status;
-            var edit = context.Unit.Where(o => o.IdUnit == model.IdUnit).SingleOrDefault();
+            var edit = context.Unit.Where(o => o.IdUnit == id).SingleOrDefault();
             if (edit != null)
             {
                 status = constant.SUCCEES;
@@ -45,10 +45,10 @@ namespace Shop.Repositories1
 
             return status;
         }
-        public UnitEditViewModel Get_Edit_Unit(UnitParam model)
+        public UnitEditViewModel Get_Edit_Unit(int id)
         {
             IQueryable<UnitEditViewModel> result = from a in context.Unit
-                                                     where a.IdUnit == model.IdUnit
+                                                     where a.IdUnit == id
                                                    select new UnitEditViewModel
                                                    {
                                                        Name = a.NameUnit
@@ -56,7 +56,7 @@ namespace Shop.Repositories1
             UnitEditViewModel data = result.SingleOrDefault();
             return data;
         }
-        public string Insert_Unit(UnitAddOREditParam model)
+        public string Insert_Unit(UnitAddOREditParam unit)
         {
             string status;
             using (var transaction = context.Database.BeginTransaction())
@@ -64,15 +64,15 @@ namespace Shop.Repositories1
                 try
                 {
                     var id_unit = (from b in context.Unit
-                                   where b.NameUnit.ToLower() == (model.Name.ToLower())
+                                   where b.NameUnit.ToLower() == (unit.Name.ToLower())
                                    select b.IdUnit).Count();
 
                     if (id_unit == 0)
                     {
-                        var result = context.Unit.Where(a => a.NameUnit == model.Name).Count();
+                        var result = context.Unit.Where(a => a.NameUnit == unit.Name).Count();
                         var nou = new Unit()
                         {
-                            NameUnit = model.Name
+                            NameUnit = unit.Name
                         };
                         context.Unit.Add(nou);
                         context.SaveChanges();
@@ -92,14 +92,14 @@ namespace Shop.Repositories1
             }
             return status;
         }
-        public string Delete_Unit(UnitParam model)
+        public string Delete_Unit(int id)
         {
             string status;
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
                 {
-                    var del = context.Unit.Where(o => o.IdUnit == model.IdUnit).SingleOrDefault();
+                    var del = context.Unit.Where(o => o.IdUnit == id).SingleOrDefault();
                     if (del != null)
                     {
                         context.Unit.Remove(del);

@@ -1,5 +1,5 @@
-﻿@using Shop.ViewModels
-@model EditProductViewmodel
+﻿@using Shop.ProductViewModels
+@model ProductViewModel
 @{
     ViewData["Title"] = "แก้ไขสินค้า";
 }
@@ -22,7 +22,7 @@
             <td>
                 <select name="name_unit" id="edit_unit">
 
-                    @foreach (var data in Model.unit)
+                    @foreach (var data in Model.getUnit)
                     {
                         if (Model.IdUnit == data.IdUnit)
                         {

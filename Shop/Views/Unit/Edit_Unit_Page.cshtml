@@ -1,5 +1,5 @@
-﻿@using Shop.ViewModels
-@model Unitviewmodel
+﻿@using Shop.UnitViewModels
+@model UnitviewModel
 
 @{
     ViewData["Title"] = "แก้ไขหน่วยสินค้า";
@@ -10,8 +10,8 @@
 <div class="text-center">
     <br><br>
     <label>ชื่อหน่วย : </label>
-            <input type="text" id="unitEdit" value="@Model.unit1.NameUnit">
-            <input type='button' value='บันทึก' id='myButton' onclick='Update(@Model.unit1.IdUnit)' />
+            <input type="text" id="unitEdit" value="@Model.unit.NameUnit">
+            <input type='button' value='บันทึก' id='myButton' onclick='Update(@Model.unit.IdUnit)' />
 
 
 </div>

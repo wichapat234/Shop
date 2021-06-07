@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Views\Transaction\Index.cshtml~RFa19403.TMP" />
+    <Compile Remove="Views\**" />
+    <Content Remove="Views\**" />
+    <EmbeddedResource Remove="Views\**" />
+    <None Remove="Views\**" />
   </ItemGroup>
 
   <ItemGroup>

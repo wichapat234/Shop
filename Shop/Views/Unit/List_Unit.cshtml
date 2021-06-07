@@ -1,5 +1,5 @@
-﻿@using Shop.ViewModels
-@model Unitviewmodel
+﻿@using Shop.UnitViewModels
+@model UnitviewModel
 
 @{
     ViewData["Title"] = "รายการหน่วยสินค้า";
@@ -20,7 +20,7 @@
         </thead>
         <tbody>
 
-                    @foreach (var data in Model.unit)
+                    @foreach (var data in Model.getUnit)
                     {
                         <tr>
                             <td>@data.NameUnit</td>
@@ -45,9 +45,9 @@
             data: obj
         })
             .then(function (response) {
-                console.log(response.data);
-                if (response.data.status == "Seccess") {
-                    document.location = 'Edit_Unit_Page/?id=' + response.data.id;
+                console.log(response.data.status);
+                if (response.data.status == "Success") {
+                    document.location = 'Get_Edit_Unit/?id=' + response.data.id;
                 } else {
                     alert("ข้อมูลนี้ถูกลบไปแล้ว")
                     window.location.reload();

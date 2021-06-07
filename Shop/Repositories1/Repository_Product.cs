@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Shop.Constan;
 using Shop.Models;
 using Shop.Models.DBModels;
-using Shop.ViewModels;
+using Shop.ProductViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,54 +20,60 @@ namespace Shop.Repositories1
             this.context = context;
         }
 
-        public List<Productsparam> Get_Product()
+        public List<ProductViewModel> Get_Product()
         {
-            IQueryable<Productsparam> queryResult = from a in context.Product
+            IQueryable<ProductViewModel> queryResult = from a in context.Product
                                                     join b in context.Unit on a.IdUnit equals b.IdUnit
                                                     orderby a.IdProduct
-                                                    select new Productsparam
+                                                    select new ProductViewModel
                                                     {
-                                                        Product_Id = a.IdProduct,
+                                                        IdProduct = a.IdProduct,
                                                         NameUnit = b.NameUnit,
                                                         NameProduct = a.ProductName,
-                                                        ProductPrice = a.ProductPrice
+                                                        ProductPrice = a.ProductPrice,
+                                                        IdUnit = b.IdUnit
                                                     };
             return queryResult.ToList();
         }
 
-        public string Check_Product(int id)
+        public string Check_Product(ProductParam model)
         {
             string status;
-            var edit = context.Product.Where(o => o.IdProduct == id).SingleOrDefault();
+            var edit = context.Product.Where(o => o.IdProduct == model.IdProduct).SingleOrDefault();
             if (edit != null)
             {
-                status = "Success";
+                status = constant.SUCCEES;
             }
             else
             {
-                status = "Null";
+                status = constant.NULL;
             }
-            var data = new { edit, status };
 
             return status;
         }
-        public EditProductViewmodel Get_Edit_Product(int id)
+        public ProductAddandEditViewModel Get_Edit_Product(ProductParam modelParam)
         {
-            IQueryable<EditProductViewmodel> result = from a in context.Product
-                                                      where a.IdProduct == id
-                                                      join b in context.Unit on a.IdUnit equals b.IdUnit
-                                                      select new EditProductViewmodel
+            IQueryable<ProductAddandEditViewModel> result = from a in context.Product
+                                                      where a.IdProduct == modelParam.IdProduct
+                                                            join b in context.Unit on a.IdUnit equals b.IdUnit
+                                                      select new ProductAddandEditViewModel
                                                       {
                                                           IdUnit = a.IdUnit,
-                                                          Product_Id = a.IdProduct,
+                                                          IdProduct = a.IdProduct,
                                                           NameUnit = b.NameUnit,
                                                           NameProduct = a.ProductName,
                                                           ProductPrice = a.ProductPrice
                                                       };
-            EditProductViewmodel data = result.SingleOrDefault();
+            ProductAddandEditViewModel data = result.SingleOrDefault();
             return data;
         }
-        public string Insert_Product(Productsparam product)
+        public List<Unit> Get_Unit()
+        {
+            IQueryable<Unit> queryResult = from a in context.Unit
+                                           select a;
+            return queryResult.ToList();
+        }
+        public string Insert_Product(ProductAddandEditParam product)
         {
             string status;
             using (var transaction = context.Database.BeginTransaction())
@@ -88,23 +95,23 @@ namespace Shop.Repositories1
                         };
                         context.Product.Add(product1);
                         context.SaveChanges();
-                        status = "Success";
+                        status = constant.SUCCEES;
                     }
                     else
                     {
-                        status = "Duplicate";
+                        status = constant.DUPLICATE;
                     }
                     transaction.Commit();
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    status = "Error";
+                    status = constant.ERROR;
                 }
             }
             return status;
         }
-        public string Delete_Product(Productsparam product)
+        public string Delete_Product(ProductParam product)
         {
             string status;
             using (var transaction = context.Database.BeginTransaction())
@@ -116,25 +123,25 @@ namespace Shop.Repositories1
                     {
                         context.Product.Remove(del);
                         context.SaveChanges();
-                        status = "Success";
+                        status = constant.SUCCEES;
                     }
                     else
                     {
-                        status = "Null";
+                        status = constant.NULL;
                     }
                     transaction.Commit();
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    status = "Error";
+                    status = constant.ERROR;
                 }
             }
 
             return status;
         }
 
-        public string Update_Product(Productsparam product)
+        public string Update_Product(ProductAddandEditParam product)
         {
             string status;
             using (var transaction = context.Database.BeginTransaction())
@@ -153,24 +160,24 @@ namespace Shop.Repositories1
                             result.ProductPrice = product.ProductPrice;
                             result.IdUnit = product.IdUnit;
                             context.SaveChanges();
-                            status = "Success";
+                            status = constant.SUCCEES;
 
                         }
                         else
                         {
-                            status = "Null";
+                            status = constant.NULL;
                         }
                     }
                     else
                     {
-                        status = "Duplicate";
+                        status = constant.DUPLICATE;
                     }
                     transaction.Commit();
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    status = "Error";
+                    status = constant.ERROR;
                 }
 
             }

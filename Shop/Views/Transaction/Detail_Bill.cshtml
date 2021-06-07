@@ -1,5 +1,5 @@
-﻿@using Shop.ViewModels
-@model bill_detailViewmodel
+﻿@using Shop.TransactionViewModels
+@model detailBillViewModel
 
 @{
     ViewData["Title"] = "รายการบิล";
@@ -23,7 +23,7 @@
             <tr>
 
                 <th>วันที่ </th>
-                <th>@Model.bill.Date.ToString("dd/MM/yyyy")</th>
+                <th>@Model.bill.Date</th>
             </tr>
             <tr>
                 <th colspan="5">&nbsp;</th>

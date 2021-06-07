@@ -1,5 +1,5 @@
-﻿@using Shop.ViewModels
-@model EditProductViewmodel
+﻿@using Shop.ProductViewModels
+@model ProductViewModel
 
 @{
     ViewData["Title"] = "เพิ่มสินค้า";
@@ -21,7 +21,7 @@
                 <select name="name_unit" id="add_unit">
 
                     @{
-                        foreach (var data in Model.unit)
+                        foreach (var data in Model.getUnit)
                         {
                             <option value="@data.IdUnit">@data.NameUnit</option>
                         }

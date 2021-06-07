@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Shop.Models;
 using Shop.Models.DBModels;
 using Shop.Repositories1;
-using Shop.ViewModels;
+using Shop.ProductViewModels;
 
 namespace Shop.Controllers
 {
@@ -25,47 +25,52 @@ namespace Shop.Controllers
             this.repository_product = repository_product;
             this.repository_unit = repository_unit;
         }
+        [HttpPost]
         public IActionResult List_Product() // done
         {
-            List<Productsparam> model = repository_product.Get_Product();
+            List<ProductViewModel> model = repository_product.Get_Product();
             return Json(model);
         }
-       public IActionResult Check_Edit_Product([FromBody] Productsparam model) // done
+        [HttpGet]
+       public IActionResult Check_Edit_Product([FromBody] ProductParam model) // done
         {
             string status;
-            int id = model.IdProduct;
-            status = repository_product.Check_Product(id);
-            var data = new { status, id };
-            return Json(data);
+            status = repository_product.Check_Product(model);
+            return Json(status);
         }
-        public IActionResult Update_Product([FromBody] Productsparam model) // done
+        [HttpGet]
+        public IActionResult Update_Product([FromQuery] ProductAddandEditParam model) // done 
         {
             string status;
             status = repository_product.Update_Product(model);
             return Json(status);
         }
-        public IActionResult Insert_Product([FromBody] Productsparam model) // done
+        [HttpGet]
+        public IActionResult Insert_Product([FromQuery] ProductAddandEditParam model) // done
         {
             string status;
             status = repository_product.Insert_Product(model);
             return Json(status);
         }
-        public IActionResult Delete_Product([FromBody] Productsparam model) // done
+        [HttpGet]
+        public IActionResult Delete_Product([FromQuery] ProductParam model) // done
         {
             string status;
             status = repository_product.Delete_Product(model);
             return Json(status);
         }
-        public IActionResult Edit_Product_Page(int id) // done
+        [HttpGet]
+        public IActionResult Get_Edit_Product(ProductParam modelParam) // done
         {
-            EditProductViewmodel model = repository_product.Get_Edit_Product(id);
-            model.unit = repository_unit.Get_Unit();
+            ProductAddandEditViewModel model = repository_product.Get_Edit_Product(modelParam);
+            model.getUnit = repository_product.Get_Unit();
             return Json(model);
         }
+        [HttpGet]
         public IActionResult Add_Product_Page() //done
         {
-            EditProductViewmodel model = new EditProductViewmodel();
-            model.unit = repository_unit.Get_Unit();
+            ProductAddandEditViewModel model = new ProductAddandEditViewModel();
+            model.getUnit = repository_product.Get_Unit();
             return Json(model);
         }
     }
